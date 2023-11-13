@@ -34,7 +34,7 @@
             Equals = new Button();
             ClearClick = new Button();
             OperatorClick = new Button();
-            button1 = new Button();
+            decimal_point = new Button();
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
@@ -67,6 +67,7 @@
             math.Name = "math";
             math.Size = new Size(424, 128);
             math.TabIndex = 1;
+            math.Text = "0";
             // 
             // BackClick
             // 
@@ -108,15 +109,15 @@
             OperatorClick.UseVisualStyleBackColor = true;
             OperatorClick.Click += OperatorClick_Click;
             // 
-            // button1
+            // decimal_point
             // 
-            button1.Location = new Point(27, 418);
-            button1.Name = "button1";
-            button1.Size = new Size(80, 80);
-            button1.TabIndex = 6;
-            button1.Text = ".";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += NumClick_Click;
+            decimal_point.Location = new Point(27, 418);
+            decimal_point.Name = "decimal_point";
+            decimal_point.Size = new Size(80, 80);
+            decimal_point.TabIndex = 6;
+            decimal_point.Text = ".";
+            decimal_point.UseVisualStyleBackColor = true;
+            decimal_point.Click += decimal_point_Click;
             // 
             // button2
             // 
@@ -255,7 +256,7 @@
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(decimal_point);
             Controls.Add(OperatorClick);
             Controls.Add(ClearClick);
             Controls.Add(Equals);
@@ -276,7 +277,7 @@
         private Button Equals;
         private Button ClearClick;
         private Button OperatorClick;
-        private Button button1;
+        private Button decimal_point;
         private Button button2;
         private Button button3;
         private Button button4;
