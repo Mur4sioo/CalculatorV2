@@ -11,37 +11,47 @@ namespace Calculator
 {
     internal class CalculatorEngine
     {
-        char[] operators = { '+', '-', '*', '/', '.', '=' };
-        List<string> math_process = new List<string>();
-        string result;
-        string temp = "";
-        public bool IsValid (string math)
-        {
-            char last = math[math.Length - 1];
-            if (operators.Any(x => math.EndsWith(x)))
-            {
-                return true;
-            }
-            return false;
-        }
-        public string Process (string math)
+        private char[] operators = { '+', '-', '*', '/' };
+        private List<string> Tokens = new List<string>();
+        private string result;
+        public void Process (string math)
         {
             string temp = "";
             foreach (char x in math)
             {
                 if (operators.Contains(x))
                 {
-                    math_process.Add(temp);
+                    Tokens.Add(temp);
                     temp = "";
-                    math_process.Add(x.ToString());
+                    Tokens.Add(x.ToString());
                 }
                 else
                 {
                     temp += x;
                 }    
             }
-            math = Evaluation(math_process, result);
-            return math.ToString();
+        }
+
+        public void ShuntingYard()
+        {
+            List<char> tokensOperators = new List<char>();
+            List<string> outputList = new List<string>();
+            char[] o1 = { '+', '-' };
+            char[] o2 = { '*', '/' };
+            bool isnumber;
+            while (Tokens.Count >= 0)
+            {
+                isnumber = double.TryParse(Tokens[i], out double temp);
+                if (isnumber)
+                {
+                    outputList.Add(Tokens[i]);
+                }
+                else
+                {
+                    
+                }
+
+            }
         }
         public string Evaluation (List <string> values, string result)
         {
