@@ -54,11 +54,11 @@ namespace Calculator
                 math.Text = "0";
                 return;
             }
-            var lastChar = text[^2]; //    23 - 3
+            var lastChar = text[^2];
             text = text[..^1];
             accept_decimal = true;
             accept_operator = lastChar is not ('+' or '-' or '*' or '/' or '.');
-            for (int i = text.Length-1; i >= 0; i--) 
+            for (int i = text.Length - 1; i >= 0; i--)
             {
                 var temp = text[i];
                 if (temp == '.')
@@ -70,7 +70,7 @@ namespace Calculator
                 {
                     break;
                 }
-                
+
             }
             math.Text = text;
         }
@@ -85,8 +85,7 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-            math.Text += "=";
-            //math.Text += engine.Process(math.Text);
+
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
@@ -109,6 +108,11 @@ namespace Calculator
                     break;
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            test.Text = engine.Tokenization(math.Text);
         }
     }
 }

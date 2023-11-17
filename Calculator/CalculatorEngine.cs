@@ -13,8 +13,9 @@ namespace Calculator
     {
         private char[] operators = { '+', '-', '*', '/' };
         private List<string> Tokens = new List<string>();
-        private string result;
-        public void Process (string math)
+        List<string> tokensOperators = new List<string>();
+        List<string> outputList = new List<string>();
+        public string Tokenization (string math)
         {
             string temp = "";
             foreach (char x in math)
@@ -30,61 +31,89 @@ namespace Calculator
                     temp += x;
                 }    
             }
+            Tokens.Add(temp);
+            temp = "";
+            temp = ShuntingYard();
+            Tokens.Clear();
+            return temp;
         }
 
-        public void ShuntingYard()
+        public string ShuntingYard()
         {
-            List<char> tokensOperators = new List<char>();
-            List<string> outputList = new List<string>();
-            char[] o1 = { '+', '-' };
-            char[] o2 = { '*', '/' };
+            string output = "";
             bool isnumber;
-            while (Tokens.Count >= 0)
+            if (Tokens.Count > 0)
             {
-                isnumber = double.TryParse(Tokens[i], out double temp);
+                foreach (var t in Tokens)
+                {
+                    isnumber = double.TryParse(t, out double temp);
+                    if (isnumber)
+                    {
+                        outputList.Add(t);
+                    }
+                    else
+                    {
+                        if (tokensOperators.Count == 0)
+                        {
+                            tokensOperators.Add(t);
+                        }
+                        else
+                        {
+                            if (tokensOperators[0] is not "*" or "/")
+                            {
+                                tokensOperators.Insert(0, t);
+                            }
+                            else
+                            {
+                                outputList.Add(tokensOperators[0]);
+                                tokensOperators.RemoveAt(0);
+                                tokensOperators.Insert(0, t);
+                            }
+                        }
+                    }
+                }
+
+                if (tokensOperators.Count > 0)
+                {
+                    foreach (var t in tokensOperators)
+                    {
+                        outputList.Add(t);
+                    }
+                }
+            }
+            tokensOperators.Clear();
+            output = Evaluation(outputList);
+            outputList.Clear();
+            return output;
+        }
+        public string Evaluation (List <string> tokenList)
+        {
+            List<double> stack = new List<double>();
+            double tempresult;
+            double x;
+            double y;
+            string result = "";
+            bool isnumber;
+            for (int i = 0; i < tokenList.Count; i++) 
+            {
+                isnumber = double.TryParse(tokenList[i], out double temp);
                 if (isnumber)
                 {
-                    outputList.Add(Tokens[i]);
+                    stack.Add(Convert.ToDouble(tokenList[i]));
                 }
                 else
                 {
-                    
-                }
-
-            }
-        }
-        public string Evaluation (List <string> values, string result)
-        {
-            double evalution_result = 0;
-            for (int i = 0; i < values.Count - 1; i++) 
-            {
-                if (double.TryParse(values[i], out double z) == false && values[i] != "=")
-                {
-                    double x = double.Parse(values[i-1]);
-                    double y = double.Parse(values[i+1]);
- 
-                    switch (values[i])
+                    if (tokenList[i] == "+")
                     {
-                        case "+":
-                            evalution_result = x + y;
-                            break;
-                        case "-":
-                            evalution_result = x - y;
-                            break;
-                        case "*":
-                            evalution_result = x * y;
-                            break;
-                        case "/":
-                            evalution_result = x / y;
-                            break;
+                        x = stack[^2];
+                        y = stack[^1];
+                        tempresult = x + y;
+                        tokenList.Add(tempresult.ToString());
                     }
-                    values.RemoveRange(0,3);
-                    values.Insert(0, evalution_result.ToString());
-                    i = 0;
                 }
             }
-            values.Clear();
-            result = evalution_result.ToString();
+
+            result = tokenList[0];
             return result;
         }
     }

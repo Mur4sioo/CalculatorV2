@@ -47,6 +47,8 @@
             button11 = new Button();
             button12 = new Button();
             button13 = new Button();
+            test = new TextBox();
+            button1 = new Button();
             SuspendLayout();
             // 
             // NumClick
@@ -239,11 +241,31 @@
             button13.UseVisualStyleBackColor = true;
             button13.Click += OperatorClick_Click;
             // 
+            // test
+            // 
+            test.Location = new Point(481, 26);
+            test.Multiline = true;
+            test.Name = "test";
+            test.Size = new Size(502, 173);
+            test.TabIndex = 19;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(696, 246);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 20;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Calculator
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(492, 546);
+            ClientSize = new Size(995, 546);
+            Controls.Add(button1);
+            Controls.Add(test);
             Controls.Add(button13);
             Controls.Add(button12);
             Controls.Add(button11);
@@ -290,5 +312,7 @@
         private Button button11;
         private Button button12;
         private Button button13;
+        private TextBox test;
+        private Button button1;
     }
 }
