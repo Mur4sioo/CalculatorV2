@@ -2,11 +2,6 @@ using System.Runtime.InteropServices.JavaScript;
 
 namespace Calculator
 {
-    /*
-       - Accept a digit, decimal point, or operator 
-       - Accept a digit or an operator 
-       - Accept a digit or a decimal point
-     */
     public partial class Calculator : Form
     {
         CalculatorEngine engine = new CalculatorEngine();
@@ -85,7 +80,7 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-
+            math.Text += '=' + engine.Tokenization(math.Text);
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
@@ -112,7 +107,7 @@ namespace Calculator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            test.Text = engine.Tokenization(math.Text);
+
         }
     }
 }

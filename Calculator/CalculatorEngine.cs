@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Calculator
 {
-    internal class CalculatorEngine
+    public class CalculatorEngine
     {
         private char[] operators = { '+', '-', '*', '/' };
         private List<string> Tokens = new List<string>();
@@ -81,6 +81,7 @@ namespace Calculator
                     }
                 }
             }
+
             tokensOperators.Clear();
             output = Evaluation(outputList);
             outputList.Clear();
@@ -92,7 +93,7 @@ namespace Calculator
             double tempresult;
             double x;
             double y;
-            string result = "";
+            double result;
             bool isnumber;
             for (int i = 0; i < tokenList.Count; i++) 
             {
@@ -106,15 +107,45 @@ namespace Calculator
                     if (tokenList[i] == "+")
                     {
                         x = stack[^2];
+                        stack.Remove(x);
                         y = stack[^1];
+                        stack.Remove(y);
                         tempresult = x + y;
-                        tokenList.Add(tempresult.ToString());
+                        stack.Add(tempresult);
+                    }
+                    if (tokenList[i] == "-")
+                    {
+                        x = stack[^2];
+                        stack.Remove(x);
+                        y = stack[^1];
+                        stack.Remove(y);
+                        tempresult = x - y;
+                        stack.Add(tempresult);
+                    }
+                    if (tokenList[i] == "*")
+                    {
+                        x = stack[^2];
+                        stack.Remove(x);
+                        y = stack[^1];
+                        stack.Remove(y);
+                        tempresult = x * y;
+                        stack.Add(tempresult);
+                    }
+                    if (tokenList[i] == "/")
+                    {
+                        x = stack[^2];
+                        stack.Remove(x);
+                        y = stack[^1];
+                        stack.Remove(y);
+                        tempresult = x / y;
+                        stack.Add(tempresult);
                     }
                 }
             }
 
-            result = tokenList[0];
-            return result;
+            result = stack[0];
+            result = Math.Round(result,2);
+            return result.ToString();
         }
     }
 }
