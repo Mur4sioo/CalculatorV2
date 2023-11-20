@@ -14,5 +14,14 @@ namespace TestProject4
             string actual = engine.Tokenization(math);
             Assert.AreEqual(result,actual);
         }
+        [TestMethod]
+        public void TestMethod2()
+        {
+            CalculatorEngine engine = new CalculatorEngine();
+            string math = "10/0";
+            string result = "5";
+            string actual = engine.Tokenization(math);
+            Assert.AreEqual(result, actual);
+        }
     }
 }
