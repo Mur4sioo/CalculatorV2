@@ -6,39 +6,75 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
+using static Calculator.CalculatorEngine;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Calculator
 {
-    public class CalculatorEngine
+    static class CalculatorEngine
     {
-        private char[] operators = { '+', '-', '*', '/' };
-        private List<string> Tokens = new List<string>();
-        List<string> tokensOperators = new List<string>();
-        List<string> outputList = new List<string>();
-        public string Tokenization (string math)
+        static readonly char[] Operators = { '+', '-', '*', '/' };
+        
+        public enum TokenType
         {
-            string temp = "";
+            OperatorPlus,
+            OperatorMinus,
+            OperatorDivide,
+            OperatorMultiply,
+            number,
+        }
+        public record Token(TokenType TokenType, double Number);
+
+        public static double Evaluate(string math)
+        {
+            var infixTokens = Tokenization(math);
+            var postfixTokens = ShuntingYard(infixTokens);
+            var result = Evaluate(postfixTokens);
+            return result;
+        }
+        private static List<Token> Tokenization (string math)
+        {
+            List<Token> Tokens = new List<Token>();
+            var temp = "";
             foreach (char x in math)
             {
-                if (operators.Contains(x))
+                if (Operators.Contains(x))
                 {
-                    Tokens.Add(temp);
-                    temp = "";
-                    Tokens.Add(x.ToString());
+                    if (temp.Length > 0)
+                    {
+                        Tokens.Add(new Token(TokenType.number,Convert.ToDouble(temp)));
+                    }
+                    if (x is '+')
+                    {
+                        Tokens.Add(new Token(TokenType.OperatorPlus, 0));
+                    }
+                    if (x is '-')
+                    {
+                        Tokens.Add(new Token(TokenType.OperatorMinus, 0));
+                    }
+                    if (x is '*')
+                    {
+                        Tokens.Add(new Token(TokenType.OperatorMultiply, 0));
+                    }
+                    if (x is '/')
+                    {
+                        Tokens.Add(new Token(TokenType.OperatorDivide, 0));
+                    }
                 }
                 else
                 {
                     temp += x;
-                }    
+                }
             }
-            Tokens.Add(temp);
-            temp = "";
-            temp = ShuntingYard();
-            Tokens.Clear();
-            return temp;
+            if (temp.Length > 0)
+            {
+                Tokens.Add(new Token(TokenType.number, Convert.ToDouble(temp)));
+            }
+
+            return Tokens;
         }
 
-        public string ShuntingYard()
+        private static List<Token> ShuntingYard(List<Token> Tokens)
         {
             string output = "";
             bool isnumber;
@@ -87,7 +123,7 @@ namespace Calculator
             outputList.Clear();
             return output;
         }
-        public string Evaluation (List <string> tokenList)
+        private static double Evaluate(List<Token> tokens)
         {
             List<double> stack = new List<double>();
             double tempresult;

@@ -9,8 +9,8 @@ namespace TestProject4
         public void TestMethod1()
         {
             CalculatorEngine engine = new CalculatorEngine();
-            string math = "4 * 2 + 9 / 3 - 5 + 1";
-            string result = "5";
+            string math = "50-2+4+10/3";
+            string result = "55,34";
             string actual = engine.Tokenization(math);
             Assert.AreEqual(result,actual);
         }
