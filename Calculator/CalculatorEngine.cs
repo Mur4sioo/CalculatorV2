@@ -11,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Calculator
 {
-    static class CalculatorEngine
+    public class CalculatorEngine
     {
         static readonly char[] Operators = { '+', '-', '*', '/' };
         
@@ -21,11 +21,11 @@ namespace Calculator
             OperatorMinus,
             OperatorDivide,
             OperatorMultiply,
-            number,
+            Number,
         }
         public record Token(TokenType TokenType, double Number);
 
-        public static double Evaluate(string math)
+        public double Evaluate(string math)
         {
             var infixTokens = Tokenization(math);
             var postfixTokens = ShuntingYard(infixTokens);
@@ -35,42 +35,35 @@ namespace Calculator
         private static List<Token> Tokenization (string math)
         {
             List<Token> Tokens = new List<Token>();
-            var temp = "";
-            foreach (char x in math)
+            var operatorindex = math.IndexOfAny(Operators);
+            while (operatorindex >= 0)
             {
-                if (Operators.Contains(x))
+                var numberpart = math.Substring(0, operatorindex);
+                Tokens.Add(new Token(TokenType.Number,Convert.ToDouble(numberpart)));
+                var operatorcharacter = math[operatorindex];
+                switch (operatorcharacter)
                 {
-                    if (temp.Length > 0)
-                    {
-                        Tokens.Add(new Token(TokenType.number,Convert.ToDouble(temp)));
-                    }
-                    if (x is '+')
-                    {
+                    case '+':
                         Tokens.Add(new Token(TokenType.OperatorPlus, 0));
-                    }
-                    if (x is '-')
-                    {
+                        break;
+                    case '-':
                         Tokens.Add(new Token(TokenType.OperatorMinus, 0));
-                    }
-                    if (x is '*')
-                    {
+                        break;
+                    case '*':
                         Tokens.Add(new Token(TokenType.OperatorMultiply, 0));
-                    }
-                    if (x is '/')
-                    {
+                        break;
+                    case '/':
                         Tokens.Add(new Token(TokenType.OperatorDivide, 0));
-                    }
+                        break;
                 }
-                else
-                {
-                    temp += x;
-                }
-            }
-            if (temp.Length > 0)
-            {
-                Tokens.Add(new Token(TokenType.number, Convert.ToDouble(temp)));
+                math = math.Substring(operatorindex + 1);
+                operatorindex = math.IndexOfAny(Operators);
             }
 
+            if (math.Length > 0)
+            {
+                Tokens.Add(new Token(TokenType.Number,Convert.ToDouble(math)));
+            }
             return Tokens;
         }
 

@@ -80,7 +80,7 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-            math.Text += '=' + engine.Tokenization(math.Text);
+            math.Text += '=' + engine.Evaluate(math.Text);
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace Calculator
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            
         }
     }
 }
