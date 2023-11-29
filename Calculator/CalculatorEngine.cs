@@ -67,20 +67,19 @@ namespace Calculator
             return Tokens;
         }
 
-        private static List<Token> ShuntingYard(List<Token> Tokens)
+        private static List<Token> ShuntingYard(List<Token> tokens)
         {
-            string output = "";
-            bool isnumber;
-            if (Tokens.Count > 0)
+            List<Token> outputList = new List<Token>();
+            List<Token> tokensOperators = new List<Token>();
+            if (tokens.Count > 0)
             {
-                foreach (var t in Tokens)
+                foreach (var t in tokens)
                 {
-                    isnumber = double.TryParse(t, out double temp);
-                    if (isnumber)
+                    if (t.TokenType == TokenType.Number) ;
                     {
                         outputList.Add(t);
                     }
-                    else
+                    if (t.TokenType != TokenType.Number)
                     {
                         if (tokensOperators.Count == 0)
                         {
@@ -88,7 +87,7 @@ namespace Calculator
                         }
                         else
                         {
-                            if (tokensOperators[0] is not "*" or "/")
+                            if (tokensOperators[0].TokenType is not (TokenType.OperatorMultiply or TokenType.OperatorDivide))
                             {
                                 tokensOperators.Insert(0, t);
                             }
@@ -110,12 +109,9 @@ namespace Calculator
                     }
                 }
             }
-
-            tokensOperators.Clear();
-            output = Evaluation(outputList);
-            outputList.Clear();
-            return output;
+            return outputList;
         }
+
         private static double Evaluate(List<Token> tokens)
         {
             List<double> stack = new List<double>();
