@@ -9,18 +9,18 @@ namespace TestProject4
         public void TestMethod1()
         {
             CalculatorEngine engine = new CalculatorEngine();
-            string math = "50-2+4+10/3";
-            string result = "55,34";
-            string actual = engine.Tokenization(math);
+            string math = "1+2";
+            string result = "3";
+            string actual = engine.Evaluate(math).ToString();
             Assert.AreEqual(result,actual);
         }
         [TestMethod]
         public void TestMethod2()
         {
             CalculatorEngine engine = new CalculatorEngine();
-            string math = "10/0";
-            string result = "5";
-            string actual = engine.Tokenization(math);
+            string math = "2-1";
+            string result = "1";
+            string actual = engine.Evaluate(math).ToString();
             Assert.AreEqual(result, actual);
         }
     }

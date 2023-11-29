@@ -29,7 +29,7 @@ namespace Calculator
         {
             var infixTokens = Tokenization(math);
             var postfixTokens = ShuntingYard(infixTokens);
-            var result = Evaluate(postfixTokens);
+            var result = Evaluation(postfixTokens);
             return result;
         }
         private static List<Token> Tokenization (string math)
@@ -75,7 +75,7 @@ namespace Calculator
             {
                 foreach (var t in tokens)
                 {
-                    if (t.TokenType == TokenType.Number) ;
+                    if (t.TokenType == TokenType.Number)
                     {
                         outputList.Add(t);
                     }
@@ -112,65 +112,56 @@ namespace Calculator
             return outputList;
         }
 
-        private static double Evaluate(List<Token> tokens)
+        private static double Evaluation (List<Token> tokens)
         {
-            List<double> stack = new List<double>();
+            Stack<double> stack = new Stack<double>();
             double tempresult;
             double x;
             double y;
             double result;
             bool isnumber;
-            for (int i = 0; i < tokenList.Count; i++) 
+            for (int i = 0; i < tokens.Count; i++) 
             {
-                isnumber = double.TryParse(tokenList[i], out double temp);
-                if (isnumber)
+                if (tokens[i].TokenType == TokenType.Number)
                 {
-                    stack.Add(Convert.ToDouble(tokenList[i]));
+                    stack.Push(tokens[i].Number);
                 }
                 else
                 {
-                    if (tokenList[i] == "+")
+                    if (tokens[i].TokenType == TokenType.OperatorPlus)
                     {
-                        x = stack[^2];
-                        stack.Remove(x);
-                        y = stack[^1];
-                        stack.Remove(y);
-                        tempresult = x + y;
-                        stack.Add(tempresult);
+                        x = stack.Pop();
+                        y = stack.Pop();
+                        tempresult = y + x;
+                        stack.Push(tempresult);
                     }
-                    if (tokenList[i] == "-")
+                    if (tokens[i].TokenType == TokenType.OperatorMinus)
                     {
-                        x = stack[^2];
-                        stack.Remove(x);
-                        y = stack[^1];
-                        stack.Remove(y);
-                        tempresult = x - y;
-                        stack.Add(tempresult);
+                        x = stack.Pop();
+                        y = stack.Pop();
+                        tempresult = y - x;
+                        stack.Push(tempresult);
                     }
-                    if (tokenList[i] == "*")
+                    if (tokens[i].TokenType == TokenType.OperatorMultiply)
                     {
-                        x = stack[^2];
-                        stack.Remove(x);
-                        y = stack[^1];
-                        stack.Remove(y);
-                        tempresult = x * y;
-                        stack.Add(tempresult);
+                        x = stack.Pop();
+                        y = stack.Pop();
+                        tempresult = y * x;
+                        stack.Push(tempresult);
                     }
-                    if (tokenList[i] == "/")
+                    if (tokens[i].TokenType == TokenType.OperatorDivide)
                     {
-                        x = stack[^2];
-                        stack.Remove(x);
-                        y = stack[^1];
-                        stack.Remove(y);
-                        tempresult = x / y;
-                        stack.Add(tempresult);
+                        x = stack.Pop();
+                        y = stack.Pop();
+                        tempresult = y / x;
+                        stack.Push(tempresult);
                     }
                 }
             }
 
-            result = stack[0];
+            result = stack.Pop();
             result = Math.Round(result,2);
-            return result.ToString();
+            return result;
         }
     }
 }
