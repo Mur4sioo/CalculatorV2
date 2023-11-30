@@ -1,10 +1,12 @@
 using System.Runtime.InteropServices.JavaScript;
+using Calculator;
+using Evaluator;
 
 namespace Calculator
 {
     public partial class Calculator : Form
     {
-        CalculatorEngine engine = new CalculatorEngine();
+        Evaluator.CalculatorEngine engine = new CalculatorEngine();
         KeyboardInput keyboardinput = new KeyboardInput();
         bool accept_digit = true;
         bool accept_operator = false;

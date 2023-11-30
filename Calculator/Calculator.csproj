@@ -16,4 +16,8 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Evaluator\Evaluator.csproj" />
+  </ItemGroup>
+
 </Project>

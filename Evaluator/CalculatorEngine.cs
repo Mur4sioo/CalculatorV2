@@ -1,29 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Xml;
-using System.Xml.Linq;
-using static Calculator.CalculatorEngine;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace Calculator
+﻿namespace Evaluator
 {
     public class CalculatorEngine
     {
         static readonly char[] Operators = { '+', '-', '*', '/' };
-        
-        public enum TokenType
-        {
-            OperatorPlus,
-            OperatorMinus,
-            OperatorDivide,
-            OperatorMultiply,
-            Number,
-        }
-        public record Token(TokenType TokenType, double Number);
 
         public double Evaluate(string math)
         {
@@ -32,14 +11,14 @@ namespace Calculator
             var result = Evaluation(postfixTokens);
             return result;
         }
-        private static List<Token> Tokenization (string math)
+        private static List<Token> Tokenization(string math)
         {
             List<Token> Tokens = new List<Token>();
             var operatorindex = math.IndexOfAny(Operators);
             while (operatorindex >= 0)
             {
                 var numberpart = math.Substring(0, operatorindex);
-                Tokens.Add(new Token(TokenType.Number,Convert.ToDouble(numberpart)));
+                Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(numberpart)));
                 var operatorcharacter = math[operatorindex];
                 switch (operatorcharacter)
                 {
@@ -62,7 +41,7 @@ namespace Calculator
 
             if (math.Length > 0)
             {
-                Tokens.Add(new Token(TokenType.Number,Convert.ToDouble(math)));
+                Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(math)));
             }
             return Tokens;
         }
@@ -112,15 +91,14 @@ namespace Calculator
             return outputList;
         }
 
-        private static double Evaluation (List<Token> tokens)
+        private static double Evaluation(List<Token> tokens)
         {
             Stack<double> stack = new Stack<double>();
             double tempresult;
             double x;
             double y;
             double result;
-            bool isnumber;
-            for (int i = 0; i < tokens.Count; i++) 
+            for (int i = 0; i < tokens.Count; i++)
             {
                 if (tokens[i].TokenType == TokenType.Number)
                 {
@@ -160,7 +138,7 @@ namespace Calculator
             }
 
             result = stack.Pop();
-            result = Math.Round(result,2);
+            result = Math.Round(result, 2);
             return result;
         }
     }
