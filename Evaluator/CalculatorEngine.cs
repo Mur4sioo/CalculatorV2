@@ -193,10 +193,7 @@
             expression : additive ;
             1+2
             */
-            var left = ParseNumber();
-            var opToken = token[index];
-            var right = ParseNumber();
-            var operatornNode = new BinaryNode(left, BinaryOperator.Plus, right);
+
 
             return ParseAdditive();
         }
@@ -208,6 +205,10 @@
                 : multiplicative ( Additive_Operator multiplicative )*
                 ;
             */
+            var left = ParseNumber();
+            var opToken = token[index];
+            var right = ParseNumber();
+            var operatornNode = new BinaryNode(left, BinaryOperator.Plus, right);
             throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
