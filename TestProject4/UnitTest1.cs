@@ -23,17 +23,17 @@ namespace TestProject4
             Assert.AreEqual(result, actual);
         }
         [TestMethod]
-        //public void TestTokenization()
-        //{
-        //    var tokens = engine.Tokenization("1+2-4");
-        //    List<Token> result = new List<Token>();
-        //    result.Add(new Token(TokenType.Number,1));
-        //    result.Add(new Token(TokenType.OperatorPlus,0));
-        //    result.Add(new Token(TokenType.Number,2));
-        //    result.Add(new Token(TokenType.OperatorMinus,0));
-        //    result.Add(new Token(TokenType.Number,4));
-        //    CollectionAssert.AreEqual(result, tokens);
-        //}
+        public void TestTokenization()
+        {
+            var tokens = CalculatorEngine.Tokenization("1+2-4");
+            List<Token> result = new List<Token>();
+            result.Add(new Token(TokenType.Number, 1));
+            result.Add(new Token(TokenType.OperatorPlus, 0));
+            result.Add(new Token(TokenType.Number, 2));
+            result.Add(new Token(TokenType.OperatorMinus, 0));
+            result.Add(new Token(TokenType.Number, 4));
+            CollectionAssert.AreEqual(result, tokens);
+        }
         public void TestAdditive()
         {
             var actual = Parser.ParseExpression("1 + 2") as BinaryNode;

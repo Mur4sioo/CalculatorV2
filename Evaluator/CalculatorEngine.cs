@@ -187,14 +187,15 @@
 
         #region Parse Methods
 
-        private AstNode? ParseExpression_()
+        private AstNode? ParseExpression()
         {
             /*
             expression : additive ;
             1+2
             */
-            var left = new NumberNode(tokens[0].Number);
-            var right = new NumberNode(tokens[2].Number);
+            var left = ParseNumber();
+            var opToken = token[index];
+            var right = ParseNumber();
             var operatornNode = new BinaryNode(left, BinaryOperator.Plus, right);
 
             return ParseAdditive();
@@ -222,6 +223,9 @@
         private AstNode? ParseNumber()
         {
             // number : Number_Literal ; 
+            var node = new NumberNode(tokens[index].Number);
+            index++;
+            return node;
             throw new NotImplementedException();
         }
 
