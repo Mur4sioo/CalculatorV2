@@ -11,7 +11,7 @@
             var result = Evaluation(postfixTokens);
             return result;
         }
-        private static List<Token> Tokenization(string math)
+        public static List<Token> Tokenization(string math)
         {
             List<Token> Tokens = new List<Token>();
             var operatorindex = math.IndexOfAny(Operators);
@@ -142,4 +142,138 @@
             return result;
         }
     }
+    public class Parser
+    {
+        private readonly List<Token> tokens;
+        private int index;
+        public Parser(List<Token> tokens)
+        {
+            this.tokens = tokens;
+            this.index = 0;
+        }
+
+        public static AstNode? ParseExpression(string input)
+        {
+            var tokens = CalculatorEngine.Tokenization(input);
+            var parser = new Parser(tokens);
+            var result = parser.ParseExpression_();
+            if (result is null)
+                return null;
+            if (parser.IsFinished() is false)
+                throw new Exception("Incomplete parse");
+            return result;
+        }
+
+        /*
+        For reference, here are the rules that pertain to tokenization
+         
+        Additive_Operator
+            : '+'   // TokenType: OperatorAdd
+            | '-'   // TokenType: OperatorSubtract
+            ;
+        Multiplicative_Operator
+            : '*'   // TokenType: OperatorMultiply
+            | '/'   // TokenType: OperatorDivide
+            ;
+        Number_Literal
+            : Digit+              // TokenType: Number
+            | Digit+ '.' Digit+   // TokenType: Number
+            |        '.' Digit+   // TokenType: Number
+            | Digit+ '.'          // TokenType: Number
+            ;
+        Digit : '0'..'9'          // Not a token.  This rule is only used as a short-hand when defining other rules
+        */
+
+
+        #region Parse Methods
+
+        private AstNode? ParseExpression_()
+        {
+            /*
+            expression : additive ;
+            1+2
+            */
+            var left = new NumberNode(tokens[0].Number);
+            var right = new NumberNode(tokens[2].Number);
+            var operatornNode = new BinaryNode(left, BinaryOperator.Plus, right);
+
+            return ParseAdditive();
+        }
+
+        private AstNode? ParseAdditive()
+        {
+            /*
+            additive
+                : multiplicative ( Additive_Operator multiplicative )*
+                ;
+            */
+            throw new NotImplementedException();
+        }
+        private AstNode? ParseMultiplicative()
+        {
+            /*
+            multiplicative
+                : number ( Multiplicative_Operator number )*
+                ;
+            */
+            throw new NotImplementedException();
+        }
+
+        private AstNode? ParseNumber()
+        {
+            // number : Number_Literal ; 
+            throw new NotImplementedException();
+        }
+
+        #endregion Parse Methods
+
+
+        #region Helper Methods
+
+        private bool IsFinished()
+        {
+            return this.index >= tokens.Count;
+        }
+
+        private bool TryConsumeTokenType(TokenType tokenType, out double number)
+        {
+            /* TODO: Implement this method
+             * If we're already finished, return false.
+             * If the current token's TokenType is not equal to the tokenType parameter, return false.
+             * Otherwise,
+             *      Set the "number" out parameter to the "Number" property of the current token
+             *      Increment index, so that we point to the next token.
+             *      Return true
+             */
+            throw new NotImplementedException();
+        }
+        private bool TryConsumeTokenType(TokenType tokenType)
+        {
+            return TryConsumeTokenType(tokenType, out _);
+        }
+        private bool TryConsumeNumber(out double number)
+        {
+            return TryConsumeTokenType(TokenType.Number, out number);
+        }
+
+        /// <summary>
+        /// Attempts to consume one of two different token types
+        /// </summary>
+        /// <param name="a">The first option</param>
+        /// <param name="b">The second option</param>
+        /// <param name="found">
+        /// Contains the token type that was found - either <paramref name="a"/> or <paramref name="b"/>
+        /// </param>
+        /// <returns>
+        /// Returns true if one of the token types was consumed.
+        /// </returns>
+        private bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
+        #endregion Helper Methods
+    }
 }
+
