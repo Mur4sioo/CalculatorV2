@@ -34,13 +34,14 @@ namespace TestProject4
             result.Add(new Token(TokenType.Number, 4));
             CollectionAssert.AreEqual(result, tokens);
         }
+        [TestMethod]
         public void TestAdditive()
         {
             var actual = Parser.ParseExpression("1 + 2") as BinaryNode;
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
-            Assert.AreEqual(BinaryOperator.Plus, actual.Operator);
+            Assert.AreEqual(BinaryOperator.Add, actual.Operator);
             Assert.AreEqual(1d, (actual.Left as NumberNode).Value);
             Assert.AreEqual(2d, (actual.Right as NumberNode).Value);
         }

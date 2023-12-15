@@ -9,8 +9,8 @@ namespace Evaluator
 
     public enum BinaryOperator
     {
-        Plus,
-        Minus,
+        Add,
+        Subtract,
         Multiply,
         Divide,
     }

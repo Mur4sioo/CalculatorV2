@@ -1,4 +1,6 @@
-﻿namespace Evaluator
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Evaluator
 {
     public class CalculatorEngine
     {
@@ -156,7 +158,7 @@
         {
             var tokens = CalculatorEngine.Tokenization(input);
             var parser = new Parser(tokens);
-            var result = parser.ParseExpression_();
+            var result = parser.ParseExpression();
             if (result is null)
                 return null;
             if (parser.IsFinished() is false)
@@ -205,10 +207,19 @@
                 : multiplicative ( Additive_Operator multiplicative )*
                 ;
             */
-            var left = ParseNumber();
-            var opToken = token[index];
-            var right = ParseNumber();
-            var operatornNode = new BinaryNode(left, BinaryOperator.Plus, right);
+            var left = ParseMultiplicative();
+            var opToken = tokens[index];
+            index++;
+            var right = ParseMultiplicative();
+            var operatorUsed = opToken.TokenType switch
+            {
+                TokenType.OperatorPlus
+                    => BinaryOperator.Add,
+                TokenType.OperatorMinus
+                    => BinaryOperator.Subtract,
+                _ => throw new NotImplementedException(),
+            };
+            var operatornNode = new BinaryNode(left, operatorUsed, right);
             throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
@@ -218,15 +229,32 @@
                 : number ( Multiplicative_Operator number )*
                 ;
             */
+            var left = ParseNumber();
+            var opToken = tokens[index];
+            index++;
+            var right = ParseNumber();
+            var operatorUsed = opToken.TokenType switch
+            {
+                TokenType.OperatorMultiply
+                    => BinaryOperator.Multiply,
+                TokenType.OperatorDivide
+                    => BinaryOperator.Divide,
+            };
+            var operatornNode = new BinaryNode(left, operatorUsed, right);
             throw new NotImplementedException();
         }
 
         private AstNode? ParseNumber()
         {
             // number : Number_Literal ; 
-            var node = new NumberNode(tokens[index].Number);
-            index++;
-            return node;
+            if (TryConsumeNumber(out var number))
+            {
+                return new NumberNode(number);
+            }
+            else
+            {
+                return null;
+            }
             throw new NotImplementedException();
         }
 
@@ -250,6 +278,22 @@
              *      Increment index, so that we point to the next token.
              *      Return true
              */
+            number = 0;
+            if (IsFinished())
+            {
+                return false;
+            }
+
+            if (tokens[index].TokenType != tokenType)
+            {
+                return false;
+            }
+            else
+            {
+                number = tokens[index].Number;
+                index++;
+                return true;
+            }
             throw new NotImplementedException();
         }
         private bool TryConsumeTokenType(TokenType tokenType)
@@ -274,7 +318,20 @@
         /// </returns>
         private bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
         {
-            // TODO
+            if (TryConsumeTokenType(a))
+            {
+                found = a;
+                return true;
+            }
+
+            if (TryConsumeTokenType(b))
+            {
+                found = b;
+                return true;
+            }
+
+            found = default;
+            return false;
             throw new NotImplementedException();
         }
 
