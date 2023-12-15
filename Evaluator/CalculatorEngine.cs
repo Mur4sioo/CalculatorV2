@@ -239,6 +239,7 @@ namespace Evaluator
                     => BinaryOperator.Multiply,
                 TokenType.OperatorDivide
                     => BinaryOperator.Divide,
+                _ => throw new NotImplementedException(),
             };
             var operatornNode = new BinaryNode(left, operatorUsed, right);
             throw new NotImplementedException();
