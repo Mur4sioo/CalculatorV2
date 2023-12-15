@@ -214,10 +214,8 @@ namespace Evaluator
             switch (opToken.TokenType)
             {
                 case TokenType.OperatorPlus:
-                    ++index;
                     return new BinaryNode(left, BinaryOperator.Add, right);
                 case TokenType.OperatorMinus:
-                    ++index;
                     return new BinaryNode(left, BinaryOperator.Subtract, right);
                 default:
                     return left;
@@ -238,12 +236,11 @@ namespace Evaluator
             switch (opToken.TokenType)
             {
                 case TokenType.OperatorMultiply:
-                    ++index;
                     return new BinaryNode(left, BinaryOperator.Multiply, right);
                 case TokenType.OperatorDivide:
-                    ++index;
                     return new BinaryNode(left, BinaryOperator.Divide, right);
                 default:
+                    index -= 2;
                     return left;
             }
             throw new NotImplementedException();
