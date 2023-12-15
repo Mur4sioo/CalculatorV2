@@ -211,15 +211,17 @@ namespace Evaluator
             var opToken = tokens[index];
             index++;
             var right = ParseMultiplicative();
-            var operatorUsed = opToken.TokenType switch
+            switch (opToken.TokenType)
             {
-                TokenType.OperatorPlus
-                    => BinaryOperator.Add,
-                TokenType.OperatorMinus
-                    => BinaryOperator.Subtract,
-                _ => throw new NotImplementedException(),
-            };
-            var operatornNode = new BinaryNode(left, operatorUsed, right);
+                case TokenType.OperatorPlus:
+                    ++index;
+                    return new BinaryNode(left, BinaryOperator.Add, right);
+                case TokenType.OperatorMinus:
+                    ++index;
+                    return new BinaryNode(left, BinaryOperator.Subtract, right);
+                default:
+                    return left;
+            }
             throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
@@ -233,15 +235,17 @@ namespace Evaluator
             var opToken = tokens[index];
             index++;
             var right = ParseNumber();
-            var operatorUsed = opToken.TokenType switch
+            switch (opToken.TokenType)
             {
-                TokenType.OperatorMultiply
-                    => BinaryOperator.Multiply,
-                TokenType.OperatorDivide
-                    => BinaryOperator.Divide,
-                _ => throw new NotImplementedException(),
-            };
-            var operatornNode = new BinaryNode(left, operatorUsed, right);
+                case TokenType.OperatorMultiply:
+                    ++index;
+                    return new BinaryNode(left, BinaryOperator.Multiply, right);
+                case TokenType.OperatorDivide:
+                    ++index;
+                    return new BinaryNode(left, BinaryOperator.Divide, right);
+                default:
+                    return left;
+            }
             throw new NotImplementedException();
         }
 
