@@ -6,12 +6,17 @@ namespace Evaluator
     {
         static readonly char[] Operators = { '+', '-', '*', '/' };
 
+        //public double Evaluate(string math)
+        //{
+        //    var infixTokens = Tokenization(math);
+        //    var postfixTokens = ShuntingYard(infixTokens);
+        //    var result = Evaluation(postfixTokens);
+        //    return result;
+        //}
         public double Evaluate(string math)
         {
-            var infixTokens = Tokenization(math);
-            var postfixTokens = ShuntingYard(infixTokens);
-            var result = Evaluation(postfixTokens);
-            return result;
+            var ast = Parser.ParseExpression(math);
+            return ast.Evaluate();
         }
         public static List<Token> Tokenization(string math)
         {
@@ -208,17 +213,17 @@ namespace Evaluator
                 ;
             */
             var left = ParseMultiplicative();
-            var opToken = tokens[index];
-            index++;
+            if (TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType) is false)
+            {
+                return left;
+            }
             var right = ParseMultiplicative();
-            switch (opToken.TokenType)
+            switch (foundTokenType)
             {
                 case TokenType.OperatorPlus:
                     return new BinaryNode(left, BinaryOperator.Add, right);
-                case TokenType.OperatorMinus:
-                    return new BinaryNode(left, BinaryOperator.Subtract, right);
                 default:
-                    return left;
+                    return new BinaryNode(left, BinaryOperator.Subtract, right);
             }
             throw new NotImplementedException();
         }
@@ -230,17 +235,19 @@ namespace Evaluator
                 ;
             */
             var left = ParseNumber();
-            var opToken = tokens[index];
-            index++;
+            if (TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType) is
+                false)
+            {
+                return left;
+            }
             var right = ParseNumber();
-            switch (opToken.TokenType)
+            switch (foundTokenType)
             {
                 case TokenType.OperatorMultiply:
                     return new BinaryNode(left, BinaryOperator.Multiply, right);
                 case TokenType.OperatorDivide:
                     return new BinaryNode(left, BinaryOperator.Divide, right);
                 default:
-                    index -= 2;
                     return left;
             }
             throw new NotImplementedException();
