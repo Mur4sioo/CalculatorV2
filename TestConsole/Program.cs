@@ -6,7 +6,8 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            Parser.ParseExpression("1+2*3");
+            var result = CalculatorEngine.Tokenization("1+(2+3)");
+            Console.WriteLine(result);
         }
     }
 }

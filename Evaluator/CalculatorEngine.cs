@@ -4,15 +4,7 @@ namespace Evaluator
 {
     public class CalculatorEngine
     {
-        static readonly char[] Operators = { '+', '-', '*', '/' };
-
-        //public double Evaluate(string math)
-        //{
-        //    var infixTokens = Tokenization(math);
-        //    var postfixTokens = ShuntingYard(infixTokens);
-        //    var result = Evaluation(postfixTokens);
-        //    return result;
-        //}
+        private static readonly char[] Operators = { '+', '-', '*', '/' };
         public double Evaluate(string math)
         {
             var ast = Parser.ParseExpression(math);
@@ -42,6 +34,7 @@ namespace Evaluator
                         Tokens.Add(new Token(TokenType.OperatorDivide, 0));
                         break;
                 }
+
                 math = math.Substring(operatorindex + 1);
                 operatorindex = math.IndexOfAny(Operators);
             }
@@ -50,103 +43,64 @@ namespace Evaluator
             {
                 Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(math)));
             }
+
             return Tokens;
         }
+    }
 
-        private static List<Token> ShuntingYard(List<Token> tokens)
+    public class Lexer
+    {
+        private readonly string text;
+        private int index;
+        public Lexer(string text)
         {
-            List<Token> outputList = new List<Token>();
-            List<Token> tokensOperators = new List<Token>();
-            if (tokens.Count > 0)
-            {
-                foreach (var t in tokens)
-                {
-                    if (t.TokenType == TokenType.Number)
-                    {
-                        outputList.Add(t);
-                    }
-                    if (t.TokenType != TokenType.Number)
-                    {
-                        if (tokensOperators.Count == 0)
-                        {
-                            tokensOperators.Add(t);
-                        }
-                        else
-                        {
-                            if (tokensOperators[0].TokenType is not (TokenType.OperatorMultiply or TokenType.OperatorDivide))
-                            {
-                                tokensOperators.Insert(0, t);
-                            }
-                            else
-                            {
-                                outputList.Add(tokensOperators[0]);
-                                tokensOperators.RemoveAt(0);
-                                tokensOperators.Insert(0, t);
-                            }
-                        }
-                    }
-                }
-
-                if (tokensOperators.Count > 0)
-                {
-                    foreach (var t in tokensOperators)
-                    {
-                        outputList.Add(t);
-                    }
-                }
-            }
-            return outputList;
+            this.text = text;
         }
 
-        private static double Evaluation(List<Token> tokens)
+        private static readonly Dictionary<char, TokenType> singleCharTokens = new Dictionary<char, TokenType>()
         {
-            Stack<double> stack = new Stack<double>();
-            double tempresult;
-            double x;
-            double y;
-            double result;
-            for (int i = 0; i < tokens.Count; i++)
+            { '(', TokenType.ParenOpen },
+            { ')', TokenType.ParenClose },
+            { '+', TokenType.OperatorPlus },
+            { '-', TokenType.OperatorMinus },
+            { '*', TokenType.OperatorMultiply },
+            { '/', TokenType.OperatorDivide },
+        };
+        public Token Current { get; private set; }
+        public bool IsFinished => index >= this.text.Length;
+        public string GetRemainingText() => this.text.Substring(index);
+        private static bool IsNumberOrDecimal(char ch) => ch == '.' || char.IsAsciiDigit(ch);
+
+        private static int CountNumberOrDecimal(string text)
+        {
+            for (var i = 0; i < text.Length; i++)
             {
-                if (tokens[i].TokenType == TokenType.Number)
-                {
-                    stack.Push(tokens[i].Number);
-                }
-                else
-                {
-                    if (tokens[i].TokenType == TokenType.OperatorPlus)
-                    {
-                        x = stack.Pop();
-                        y = stack.Pop();
-                        tempresult = y + x;
-                        stack.Push(tempresult);
-                    }
-                    if (tokens[i].TokenType == TokenType.OperatorMinus)
-                    {
-                        x = stack.Pop();
-                        y = stack.Pop();
-                        tempresult = y - x;
-                        stack.Push(tempresult);
-                    }
-                    if (tokens[i].TokenType == TokenType.OperatorMultiply)
-                    {
-                        x = stack.Pop();
-                        y = stack.Pop();
-                        tempresult = y * x;
-                        stack.Push(tempresult);
-                    }
-                    if (tokens[i].TokenType == TokenType.OperatorDivide)
-                    {
-                        x = stack.Pop();
-                        y = stack.Pop();
-                        tempresult = y / x;
-                        stack.Push(tempresult);
-                    }
-                }
+                if (IsNumberOrDecimal(text[i]) is false) 
+                    return i;
+            }
+            return text.Length;
+        }
+        public bool Read()
+        {
+            if (IsFinished)
+                return false;
+            var remaining = GetRemainingText();
+            var firstCharacter = remaining[0];
+            if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType))
+            {
+                this.Current = new Token(tokenType, 0);
+                index++;
+                return true;
             }
 
-            result = stack.Pop();
-            result = Math.Round(result, 2);
-            return result;
+            if (IsNumberOrDecimal(firstCharacter))
+            {
+                var length = CountNumberOrDecimal(remaining);
+                var numberPart = remaining.Substring(0, length);
+                this.Current = new Token(TokenType.Number, double.Parse(numberPart));
+                index += length;
+            }
+            throw new NotImplementedException();
         }
     }
     public class Parser
@@ -213,18 +167,23 @@ namespace Evaluator
                 ;
             */
             var left = ParseMultiplicative();
-            if (TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType) is false)
+            while (TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType))
             {
-                return left;
+                var right = ParseMultiplicative();
+                switch (foundTokenType)
+                {
+                    case TokenType.OperatorPlus:
+                        left = new BinaryNode(left, BinaryOperator.Add, right);
+                        break;
+                    case TokenType.OperatorMinus:
+                        left = new BinaryNode(left, BinaryOperator.Subtract, right);
+                        break;
+                    default:
+                        return left;
+                }
             }
-            var right = ParseMultiplicative();
-            switch (foundTokenType)
-            {
-                case TokenType.OperatorPlus:
-                    return new BinaryNode(left, BinaryOperator.Add, right);
-                default:
-                    return new BinaryNode(left, BinaryOperator.Subtract, right);
-            }
+
+            return left;
             throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
@@ -235,21 +194,22 @@ namespace Evaluator
                 ;
             */
             var left = ParseNumber();
-            if (TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType) is
-                false)
+            while (TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
-                return left;
+                var right = ParseNumber();
+                switch (foundTokenType)
+                {
+                    case TokenType.OperatorMultiply:
+                         left = new BinaryNode(left, BinaryOperator.Multiply, right);
+                        break;
+                    case TokenType.OperatorDivide:
+                        left = new BinaryNode(left, BinaryOperator.Divide, right);
+                        break;
+                    default:
+                        return left;
+                }
             }
-            var right = ParseNumber();
-            switch (foundTokenType)
-            {
-                case TokenType.OperatorMultiply:
-                    return new BinaryNode(left, BinaryOperator.Multiply, right);
-                case TokenType.OperatorDivide:
-                    return new BinaryNode(left, BinaryOperator.Divide, right);
-                default:
-                    return left;
-            }
+            return left;
             throw new NotImplementedException();
         }
 

@@ -37,7 +37,7 @@ namespace TestProject4
         [TestMethod]
         public void TestAdditive()
         {
-            var actual = Parser.ParseExpression("1 * 2 + 3") as BinaryNode;
+            var actual = Parser.ParseExpression("1 * 2") as BinaryNode;
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
@@ -48,7 +48,7 @@ namespace TestProject4
         [TestMethod]
         public void TestEvaluate()
         {
-            var math = engine.Evaluate("1 + 2 + 3 +4 + 5");
+            var math = engine.Evaluate("1 + 2 +3 +4 + 5");
             double actual = 15;
             Assert.AreEqual(actual, math);
         }

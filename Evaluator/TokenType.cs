@@ -12,7 +12,9 @@ namespace Evaluator
         OperatorMinus,
         OperatorDivide,
         OperatorMultiply,
-        Number, 
+        Number,
+        ParenOpen,
+        ParenClose,
     }
     
 }

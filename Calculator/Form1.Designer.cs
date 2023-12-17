@@ -47,8 +47,6 @@
             button11 = new Button();
             button12 = new Button();
             button13 = new Button();
-            button1 = new Button();
-            textBox1 = new TextBox();
             SuspendLayout();
             // 
             // NumClick
@@ -241,31 +239,11 @@
             button13.UseVisualStyleBackColor = true;
             button13.Click += OperatorClick_Click;
             // 
-            // button1
-            // 
-            button1.Location = new Point(371, 332);
-            button1.Name = "button1";
-            button1.Size = new Size(80, 80);
-            button1.TabIndex = 19;
-            button1.Text = "Test";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            textBox1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(457, 88);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(393, 46);
-            textBox1.TabIndex = 20;
-            // 
             // Calculator
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(862, 546);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
+            ClientSize = new Size(474, 546);
             Controls.Add(button13);
             Controls.Add(button12);
             Controls.Add(button11);
@@ -312,7 +290,5 @@
         private Button button11;
         private Button button12;
         private Button button13;
-        private Button button1;
-        private TextBox textBox1;
     }
 }
