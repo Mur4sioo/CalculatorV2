@@ -5,11 +5,16 @@ namespace Evaluator
     public class CalculatorEngine
     {
         private static readonly char[] Operators = { '+', '-', '*', '/' };
+
         public double Evaluate(string math)
         {
             var ast = Parser.ParseExpression(math);
-            return ast.Evaluate();
+            //return ast.Evaluate();
+            var result = ast.Evaluate();
+            result = Math.Round(result, 2);
+            return result;
         }
+
         public static List<Token> Tokenization(string math)
         {
             List<Token> Tokens = new List<Token>();
@@ -46,6 +51,18 @@ namespace Evaluator
 
             return Tokens;
         }
+
+        public static List<Token> Tokenizer(string math)
+        {
+            var list = new List<Token>();
+            var lexer = new Lexer(math);
+            while (lexer.Read())
+            { 
+                list.Add(lexer.Current);
+            }
+            return list;
+        }
+        
     }
 
     public class Lexer
@@ -82,24 +99,28 @@ namespace Evaluator
         }
         public bool Read()
         {
-            if (IsFinished)
-                return false;
-            var remaining = GetRemainingText();
-            var firstCharacter = remaining[0];
-            if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType))
+            while (IsFinished is false)
             {
-                this.Current = new Token(tokenType, 0);
-                index++;
-                return true;
+                var remaining = GetRemainingText();
+                var firstCharacter = remaining[0];
+                if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
+                {
+                    this.Current = new Token(tokenType, 0);
+                    index++;
+                    return true;
+                }
+
+                if (IsNumberOrDecimal(firstCharacter))
+                {
+                    var length = CountNumberOrDecimal(remaining);
+                    var numberPart = remaining.Substring(0, length);
+                    this.Current = new Token(TokenType.Number, Convert.ToDouble(numberPart));
+                    index += length;
+                }
             }
 
-            if (IsNumberOrDecimal(firstCharacter))
-            {
-                var length = CountNumberOrDecimal(remaining);
-                var numberPart = remaining.Substring(0, length);
-                this.Current = new Token(TokenType.Number, double.Parse(numberPart));
-                index += length;
-            }
+            return false;
+
             throw new NotImplementedException();
         }
     }
@@ -124,48 +145,15 @@ namespace Evaluator
                 throw new Exception("Incomplete parse");
             return result;
         }
-
-        /*
-        For reference, here are the rules that pertain to tokenization
-         
-        Additive_Operator
-            : '+'   // TokenType: OperatorAdd
-            | '-'   // TokenType: OperatorSubtract
-            ;
-        Multiplicative_Operator
-            : '*'   // TokenType: OperatorMultiply
-            | '/'   // TokenType: OperatorDivide
-            ;
-        Number_Literal
-            : Digit+              // TokenType: Number
-            | Digit+ '.' Digit+   // TokenType: Number
-            |        '.' Digit+   // TokenType: Number
-            | Digit+ '.'          // TokenType: Number
-            ;
-        Digit : '0'..'9'          // Not a token.  This rule is only used as a short-hand when defining other rules
-        */
-
-
         #region Parse Methods
 
         private AstNode? ParseExpression()
         {
-            /*
-            expression : additive ;
-            1+2
-            */
-
-
             return ParseAdditive();
         }
 
         private AstNode? ParseAdditive()
         {
-            /*
-            additive
-                : multiplicative ( Additive_Operator multiplicative )*
-                ;
-            */
             var left = ParseMultiplicative();
             while (TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType))
             {
@@ -182,17 +170,11 @@ namespace Evaluator
                         return left;
                 }
             }
-
             return left;
             throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
         {
-            /*
-            multiplicative
-                : number ( Multiplicative_Operator number )*
-                ;
-            */
             var left = ParseNumber();
             while (TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
@@ -215,7 +197,6 @@ namespace Evaluator
 
         private AstNode? ParseNumber()
         {
-            // number : Number_Literal ; 
             if (TryConsumeNumber(out var number))
             {
                 return new NumberNode(number);
@@ -239,14 +220,6 @@ namespace Evaluator
 
         private bool TryConsumeTokenType(TokenType tokenType, out double number)
         {
-            /* TODO: Implement this method
-             * If we're already finished, return false.
-             * If the current token's TokenType is not equal to the tokenType parameter, return false.
-             * Otherwise,
-             *      Set the "number" out parameter to the "Number" property of the current token
-             *      Increment index, so that we point to the next token.
-             *      Return true
-             */
             number = 0;
             if (IsFinished())
             {

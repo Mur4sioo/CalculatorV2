@@ -6,8 +6,13 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            var result = CalculatorEngine.Tokenization("1+(2+3)");
-            Console.WriteLine(result);
+            var i = 0;
+            var result = CalculatorEngine.Tokenizer("1+2+3");
+            foreach (var t in result)
+            {
+                Console.WriteLine(result[i]);
+                i++;
+            }
         }
     }
 }
