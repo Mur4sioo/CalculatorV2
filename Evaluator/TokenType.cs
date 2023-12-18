@@ -8,6 +8,7 @@ namespace Evaluator
 {
     public enum TokenType
     {
+        Unknown,
         OperatorPlus,
         OperatorMinus,
         OperatorDivide,

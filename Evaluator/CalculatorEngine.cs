@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 
 namespace Evaluator
 {
@@ -9,50 +10,47 @@ namespace Evaluator
         public double Evaluate(string math)
         {
             var ast = Parser.ParseExpression(math);
-            //return ast.Evaluate();
-            var result = ast.Evaluate();
-            result = Math.Round(result, 2);
-            return result;
+            return Math.Round(ast.Evaluate(),2);
         }
+
+        //public static List<Token> Tokenizationk(string math)
+        //{
+        //    List<Token> Tokens = new List<Token>();
+        //    var operatorindex = math.IndexOfAny(Operators);
+        //    while (operatorindex >= 0)
+        //    {
+        //        var numberpart = math.Substring(0, operatorindex);
+        //        Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(numberpart)));
+        //        var operatorcharacter = math[operatorindex];
+        //        switch (operatorcharacter)
+        //        {
+        //            case '+':
+        //                Tokens.Add(new Token(TokenType.OperatorPlus, 0));
+        //                break;
+        //            case '-':
+        //                Tokens.Add(new Token(TokenType.OperatorMinus, 0));
+        //                break;
+        //            case '*':
+        //                Tokens.Add(new Token(TokenType.OperatorMultiply, 0));
+        //                break;
+        //            case '/':
+        //                Tokens.Add(new Token(TokenType.OperatorDivide, 0));
+        //                break;
+        //        }
+
+        //        math = math.Substring(operatorindex + 1);
+        //        operatorindex = math.IndexOfAny(Operators);
+        //    }
+
+        //    if (math.Length > 0)
+        //    {
+        //        Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(math)));
+        //    }
+
+        //    return Tokens;
+        //}
 
         public static List<Token> Tokenization(string math)
-        {
-            List<Token> Tokens = new List<Token>();
-            var operatorindex = math.IndexOfAny(Operators);
-            while (operatorindex >= 0)
-            {
-                var numberpart = math.Substring(0, operatorindex);
-                Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(numberpart)));
-                var operatorcharacter = math[operatorindex];
-                switch (operatorcharacter)
-                {
-                    case '+':
-                        Tokens.Add(new Token(TokenType.OperatorPlus, 0));
-                        break;
-                    case '-':
-                        Tokens.Add(new Token(TokenType.OperatorMinus, 0));
-                        break;
-                    case '*':
-                        Tokens.Add(new Token(TokenType.OperatorMultiply, 0));
-                        break;
-                    case '/':
-                        Tokens.Add(new Token(TokenType.OperatorDivide, 0));
-                        break;
-                }
-
-                math = math.Substring(operatorindex + 1);
-                operatorindex = math.IndexOfAny(Operators);
-            }
-
-            if (math.Length > 0)
-            {
-                Tokens.Add(new Token(TokenType.Number, Convert.ToDouble(math)));
-            }
-
-            return Tokens;
-        }
-
-        public static List<Token> Tokenizer(string math)
         {
             var list = new List<Token>();
             var lexer = new Lexer(math);
@@ -83,7 +81,7 @@ namespace Evaluator
             { '*', TokenType.OperatorMultiply },
             { '/', TokenType.OperatorDivide },
         };
-        public Token Current { get; private set; }
+        public Token Current { get; private set; } = Token.Unknown;
         public bool IsFinished => index >= this.text.Length;
         public string GetRemainingText() => this.text.Substring(index);
         private static bool IsNumberOrDecimal(char ch) => ch == '.' || char.IsAsciiDigit(ch);
@@ -97,47 +95,103 @@ namespace Evaluator
             }
             return text.Length;
         }
+
+        private void SkipWhiteSpace()
+        {
+            var count = CountWhiteSpaceCharacters(GetRemainingText());
+            index += count;
+        }
+
+        private static int CountWhiteSpaceCharacters(string text)
+        {
+            for (var i = 0; i < text.Length; i++)
+            {
+                if (char.IsWhiteSpace(text[i]) is false)
+                    return i;
+            }
+            return text.Length;
+        }
         public bool Read()
         {
-            while (IsFinished is false)
+            if (IsFinished)
             {
-                var remaining = GetRemainingText();
-                var firstCharacter = remaining[0];
-                if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
-                {
-                    this.Current = new Token(tokenType, 0);
-                    index++;
-                    return true;
-                }
-
-                if (IsNumberOrDecimal(firstCharacter))
-                {
-                    var length = CountNumberOrDecimal(remaining);
-                    var numberPart = remaining.Substring(0, length);
-                    this.Current = new Token(TokenType.Number, Convert.ToDouble(numberPart));
-                    index += length;
-                }
+                this.Current = Token.Unknown;
+                return false;
             }
 
+            SkipWhiteSpace();
+            var remaining = GetRemainingText();
+            var firstCharacter = remaining[0];
+            if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
+            {
+                this.Current = new Token(tokenType, 0);
+                index++;
+                return true;
+            }
+
+            if (IsNumberOrDecimal(firstCharacter))
+            {
+                var length = CountNumberOrDecimal(remaining);
+                var numberPart = remaining.Substring(0, length);
+                this.Current = new Token(TokenType.Number, Convert.ToDouble(numberPart));
+                index += length;
+                return true;
+            }
+            
             return false;
 
+            throw new NotImplementedException();
+        }
+        public bool TryConsumeTokenType(TokenType tokenType, out double number)
+        {
+            number = 0;
+            if (IsFinished || this.Current.TokenType != tokenType)
+            {
+                return false;
+            }
+            number = this.Current.Number;
+            Read();
+            return true;
+        }
+        public bool TryConsumeTokenType(TokenType tokenType)
+        {
+            return TryConsumeTokenType(tokenType, out _);
+        }
+        public bool TryConsumeNumber(out double number)
+        {
+            return TryConsumeTokenType(TokenType.Number, out number);
+        }
+        public bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
+        {
+            if (TryConsumeTokenType(a))
+            {
+                found = a;
+                return true;
+            }
+
+            if (TryConsumeTokenType(b))
+            {
+                found = b;
+                return true;
+            }
+
+            found = default;
+            return false;
             throw new NotImplementedException();
         }
     }
     public class Parser
     {
-        private readonly List<Token> tokens;
-        private int index;
-        public Parser(List<Token> tokens)
+        private readonly  Lexer lexer;
+        public Parser(Lexer lexer)
         {
-            this.tokens = tokens;
-            this.index = 0;
+            this.lexer = lexer;
         }
 
         public static AstNode? ParseExpression(string input)
         {
-            var tokens = CalculatorEngine.Tokenization(input);
-            var parser = new Parser(tokens);
+            var lexer = new Lexer(input);
+            var parser = new Parser(lexer);
             var result = parser.ParseExpression();
             if (result is null)
                 return null;
@@ -155,7 +209,7 @@ namespace Evaluator
         private AstNode? ParseAdditive()
         {
             var left = ParseMultiplicative();
-            while (TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType))
+            while (lexer.TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType))
             {
                 var right = ParseMultiplicative();
                 switch (foundTokenType)
@@ -176,7 +230,7 @@ namespace Evaluator
         private AstNode? ParseMultiplicative()
         {
             var left = ParseNumber();
-            while (TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
+            while (lexer.TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
                 var right = ParseNumber();
                 switch (foundTokenType)
@@ -197,7 +251,7 @@ namespace Evaluator
 
         private AstNode? ParseNumber()
         {
-            if (TryConsumeNumber(out var number))
+            if (lexer.TryConsumeNumber(out var number))
             {
                 return new NumberNode(number);
             }
@@ -215,68 +269,8 @@ namespace Evaluator
 
         private bool IsFinished()
         {
-            return this.index >= tokens.Count;
+            return lexer.IsFinished;
         }
-
-        private bool TryConsumeTokenType(TokenType tokenType, out double number)
-        {
-            number = 0;
-            if (IsFinished())
-            {
-                return false;
-            }
-
-            if (tokens[index].TokenType != tokenType)
-            {
-                return false;
-            }
-            else
-            {
-                number = tokens[index].Number;
-                index++;
-                return true;
-            }
-            throw new NotImplementedException();
-        }
-        private bool TryConsumeTokenType(TokenType tokenType)
-        {
-            return TryConsumeTokenType(tokenType, out _);
-        }
-        private bool TryConsumeNumber(out double number)
-        {
-            return TryConsumeTokenType(TokenType.Number, out number);
-        }
-
-        /// <summary>
-        /// Attempts to consume one of two different token types
-        /// </summary>
-        /// <param name="a">The first option</param>
-        /// <param name="b">The second option</param>
-        /// <param name="found">
-        /// Contains the token type that was found - either <paramref name="a"/> or <paramref name="b"/>
-        /// </param>
-        /// <returns>
-        /// Returns true if one of the token types was consumed.
-        /// </returns>
-        private bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
-        {
-            if (TryConsumeTokenType(a))
-            {
-                found = a;
-                return true;
-            }
-
-            if (TryConsumeTokenType(b))
-            {
-                found = b;
-                return true;
-            }
-
-            found = default;
-            return false;
-            throw new NotImplementedException();
-        }
-
         #endregion Helper Methods
     }
 }
