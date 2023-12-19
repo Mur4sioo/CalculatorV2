@@ -70,6 +70,7 @@ namespace Evaluator
         public Lexer(string text)
         {
             this.text = text;
+            Read();
         }
 
         private static readonly Dictionary<char, TokenType> singleCharTokens = new Dictionary<char, TokenType>()
@@ -229,9 +230,13 @@ namespace Evaluator
         private AstNode? ParseMultiplicative()
         {
             var left = ParseNumber();
+            if (left is null)
+                return null;
             while (lexer.TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
                 var right = ParseNumber();
+                if (right is null)
+                    throw new Exception($"Invalid parse: had a {foundTokenType}, but could not parse a number");
                 switch (foundTokenType)
                 {
                     case TokenType.OperatorMultiply:
