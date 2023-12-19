@@ -25,13 +25,15 @@ namespace TestProject4
         [TestMethod]
         public void TestTokenization()
         {
-            var tokens = CalculatorEngine.Tokenization("1+2-4");
+            var tokens = CalculatorEngine.Tokenization("1+(2-4)");
             List<Token> result = new List<Token>();
             result.Add(new Token(TokenType.Number, 1));
             result.Add(new Token(TokenType.OperatorPlus, 0));
+            result.Add(new Token(TokenType.ParenOpen, 0));
             result.Add(new Token(TokenType.Number, 2));
             result.Add(new Token(TokenType.OperatorMinus, 0));
             result.Add(new Token(TokenType.Number, 4));
+            result.Add(new Token(TokenType.ParenClose, 0));
             CollectionAssert.AreEqual(result, tokens);
         }
         [TestMethod]
@@ -42,14 +44,14 @@ namespace TestProject4
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
             Assert.AreEqual(BinaryOperator.Multiply, actual.Operator);
-            Assert.AreEqual(1d, (actual.Left as NumberNode).Value);
+            Assert.AreEqual(1d, (actual.Left as NumberNode).Value); 
             Assert.AreEqual(2d, (actual.Right as NumberNode).Value);
         }
         [TestMethod]
         public void TestEvaluate()
         {
-            var math = engine.Evaluate("1 + 2 +3 +4 + 5");
-            double actual = 15;
+            var math = engine.Evaluate("1 + (2 +3) *2 + 1");
+            double actual = 12;
             Assert.AreEqual(actual, math);
         }
     }

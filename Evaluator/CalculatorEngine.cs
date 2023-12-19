@@ -11,6 +11,7 @@ namespace Evaluator
         {
             var ast = Parser.ParseExpression(math);
             return Math.Round(ast.Evaluate(),2);
+            
         }
 
         //public static List<Token> Tokenizationk(string math)
@@ -54,10 +55,10 @@ namespace Evaluator
         {
             var list = new List<Token>();
             var lexer = new Lexer(math);
-            while (lexer.Read())
-            { 
+            do
+            {
                 list.Add(lexer.Current);
-            }
+            } while (lexer.Read());
             return list;
         }
         
@@ -83,11 +84,11 @@ namespace Evaluator
             { '/', TokenType.OperatorDivide },
         };
         public Token Current { get; private set; } = Token.Unknown;
-        public bool IsFinished => index >= this.text.Length;
-        public string GetRemainingText() => this.text.Substring(index);
+        public bool IsFinished { get; private set; }
+        public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
         private static bool IsNumberOrDecimal(char ch) => ch == '.' || char.IsAsciiDigit(ch);
 
-        private static int CountNumberOrDecimal(string text)
+        private static int CountNumberOrDecimal(ReadOnlySpan<char> text)
         {
             for (var i = 0; i < text.Length; i++)
             {
@@ -103,7 +104,7 @@ namespace Evaluator
             index += count;
         }
 
-        private static int CountWhiteSpaceCharacters(string text)
+        private static int CountWhiteSpaceCharacters(ReadOnlySpan<char> text)
         {
             for (var i = 0; i < text.Length; i++)
             {
@@ -122,6 +123,12 @@ namespace Evaluator
 
             SkipWhiteSpace();
             var remaining = GetRemainingText();
+            if (remaining.IsEmpty)
+            {
+                this.IsFinished = true;
+                this.Current = Token.Unknown;
+                return false;
+            }
             var firstCharacter = remaining[0];
             if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
             {
@@ -133,8 +140,8 @@ namespace Evaluator
             if (IsNumberOrDecimal(firstCharacter))
             {
                 var length = CountNumberOrDecimal(remaining);
-                var numberPart = remaining.Substring(0, length);
-                this.Current = new Token(TokenType.Number, Convert.ToDouble(numberPart));
+                var numberPart = remaining.Slice(0, length);
+                this.Current = new Token(TokenType.Number, double.Parse(numberPart));
                 index += length;
                 return true;
             }
@@ -189,13 +196,13 @@ namespace Evaluator
             this.lexer = lexer;
         }
 
-        public static AstNode? ParseExpression(string input)
+        public static AstNode ParseExpression(string input)
         {
             var lexer = new Lexer(input);
             var parser = new Parser(lexer);
             var result = parser.ParseExpression();
             if (result is null)
-                return null;
+                throw new Exception("Invalid Input");
             if (lexer.IsFinished is false)
                 throw new Exception("Incomplete parse");
             return result;
@@ -210,9 +217,13 @@ namespace Evaluator
         private AstNode? ParseAdditive()
         {
             var left = ParseMultiplicative();
+            if (left is null)
+                return null;
             while (lexer.TryConsumeTokenType(TokenType.OperatorPlus, TokenType.OperatorMinus, out var foundTokenType))
             {
                 var right = ParseMultiplicative();
+                if (right is null)
+                    return null;
                 switch (foundTokenType)
                 {
                     case TokenType.OperatorPlus:
@@ -229,12 +240,12 @@ namespace Evaluator
         }
         private AstNode? ParseMultiplicative()
         {
-            var left = ParseNumber();
+            var left = ParsePrimary();
             if (left is null)
                 return null;
             while (lexer.TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
-                var right = ParseNumber();
+                var right = ParsePrimary();
                 if (right is null)
                     throw new Exception($"Invalid parse: had a {foundTokenType}, but could not parse a number");
                 switch (foundTokenType)
@@ -253,6 +264,24 @@ namespace Evaluator
             throw new NotImplementedException();
         }
 
+        private AstNode? ParsePrimary()
+        {
+            return ParseParenthetical() ?? ParseNumber();
+        }
+
+        private AstNode? ParseParenthetical()
+        {
+            if (lexer.TryConsumeTokenType((TokenType.ParenOpen)))
+            {
+                var left = ParseExpression();
+                if (left is null)
+                    throw new Exception("Bad Formula.");
+                if (lexer.TryConsumeTokenType(TokenType.ParenClose))
+                    return left;
+                throw new Exception("Bad Formula.");
+            }
+            return null;
+        }
         private AstNode? ParseNumber()
         {
             if (lexer.TryConsumeNumber(out var number))
