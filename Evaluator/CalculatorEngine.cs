@@ -195,7 +195,7 @@ namespace Evaluator
             var result = parser.ParseExpression();
             if (result is null)
                 return null;
-            if (parser.IsFinished() is false)
+            if (lexer.IsFinished is false)
                 throw new Exception("Incomplete parse");
             return result;
         }
@@ -225,7 +225,6 @@ namespace Evaluator
                 }
             }
             return left;
-            throw new NotImplementedException();
         }
         private AstNode? ParseMultiplicative()
         {
@@ -263,15 +262,6 @@ namespace Evaluator
         }
 
         #endregion Parse Methods
-
-
-        #region Helper Methods
-
-        private bool IsFinished()
-        {
-            return lexer.IsFinished;
-        }
-        #endregion Helper Methods
     }
 }
 
