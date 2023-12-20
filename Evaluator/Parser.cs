@@ -58,12 +58,12 @@ namespace Evaluator
         }
         private AstNode? ParseMultiplicative()
         {
-            var left = ParsePrimary();
+            var left = ParseUnary();
             if (left is null)
                 return null;
             while (lexer.TryConsumeTokenType(TokenType.OperatorMultiply, TokenType.OperatorDivide, out var foundTokenType))
             {
-                var right = ParsePrimary();
+                var right = ParseUnary();
                 if (right is null)
                     throw new ParseException();
                 switch (foundTokenType)
