@@ -17,6 +17,11 @@ namespace Evaluator
         Multiply,
         Divide,
     }
+    public enum UnaryOperator
+    {
+        Plus,
+        Negate,
+    }
 
     public abstract record AstNode
     {
@@ -31,6 +36,15 @@ namespace Evaluator
         }
     }
 
+    public sealed record UnaryNode(UnaryOperator Operator, NumberNode Value) : AstNode
+    {
+        public override double Evaluate()
+        {
+           
+            return Value - (Value*2);
+        }
+    }
+    
     public sealed record BinaryNode(AstNode Left, BinaryOperator Operator, AstNode Right) : AstNode
     {
         public override double Evaluate()
