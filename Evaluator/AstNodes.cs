@@ -36,12 +36,20 @@ namespace Evaluator
         }
     }
 
-    public sealed record UnaryNode(UnaryOperator Operator, NumberNode Value) : AstNode
+    public sealed record UnaryNode(UnaryOperator Operator, AstNode Value) : AstNode
     {
         public override double Evaluate()
         {
-           
-            return Value - (Value*2);
+            var result = Value.Evaluate();
+            switch (Operator)
+            {
+                case UnaryOperator.Negate:
+                    return -result;
+                case UnaryOperator.Plus:
+                    return result;
+                default:
+                    throw new NotImplementedException($"Unhandled unary operator {Operator}");
+            }
         }
     }
     

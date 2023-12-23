@@ -47,6 +47,8 @@
             button11 = new Button();
             button12 = new Button();
             button13 = new Button();
+            button1 = new Button();
+            button14 = new Button();
             SuspendLayout();
             // 
             // NumClick
@@ -239,11 +241,31 @@
             button13.UseVisualStyleBackColor = true;
             button13.Click += OperatorClick_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(371, 332);
+            button1.Name = "button1";
+            button1.Size = new Size(80, 80);
+            button1.TabIndex = 19;
+            button1.Text = "(";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // button14
+            // 
+            button14.Location = new Point(371, 418);
+            button14.Name = "button14";
+            button14.Size = new Size(80, 80);
+            button14.TabIndex = 20;
+            button14.Text = ")";
+            button14.UseVisualStyleBackColor = true;
+            // 
             // Calculator
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(474, 546);
+            Controls.Add(button14);
+            Controls.Add(button1);
             Controls.Add(button13);
             Controls.Add(button12);
             Controls.Add(button11);
@@ -290,5 +312,7 @@
         private Button button11;
         private Button button12;
         private Button button13;
+        private Button button1;
+        private Button button14;
     }
 }

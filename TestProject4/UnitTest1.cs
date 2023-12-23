@@ -54,5 +54,19 @@ namespace TestProject4
             double actual = 12;
             Assert.AreEqual(actual, math);
         }
+        [TestMethod]
+        public void TestNegation()
+        {
+            var math = engine.Evaluate("-5--7");
+            double actual = 2;
+            Assert.AreEqual(actual, math);
+        }
+        [TestMethod]
+        public void TestNegation2()
+        {
+            var math = engine.Evaluate("-5----7");
+            double actual = 2;
+            Assert.AreEqual(actual, math);
+        }
     }
 }

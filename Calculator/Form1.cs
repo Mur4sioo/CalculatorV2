@@ -34,13 +34,7 @@ namespace Calculator
 
         private void OperatorClick_Click(object sender, EventArgs e)
         {
-            while (accept_operator && math.Text != "0")
-            {
-                math.Text += ((Button)sender).Text;
-                accept_digit = true;
-                accept_operator = false;
-                accept_decimal = true;
-            }
+            math.Text += ((Button)sender).Text;
         }
 
         private void BackClick_Click(object sender, EventArgs e)
@@ -51,24 +45,7 @@ namespace Calculator
                 math.Text = "0";
                 return;
             }
-            var lastChar = text[^2];
             text = text[..^1];
-            accept_decimal = true;
-            accept_operator = lastChar is not ('+' or '-' or '*' or '/' or '.');
-            for (int i = text.Length - 1; i >= 0; i--)
-            {
-                var temp = text[i];
-                if (temp == '.')
-                {
-                    accept_decimal = false;
-                    break;
-                }
-                else if (temp is ('+' or '-' or '*' or '/' or '.'))
-                {
-                    break;
-                }
-
-            }
             math.Text = text;
         }
 
