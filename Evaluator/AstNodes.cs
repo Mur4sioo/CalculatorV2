@@ -76,6 +76,11 @@ namespace Evaluator
             {
                 return x * y;
             }
+
+            if (Operator == BinaryOperator.Exponent)
+            {
+                return Math.Pow(x, y);
+            }
             throw new NotImplementedException();
         }
 

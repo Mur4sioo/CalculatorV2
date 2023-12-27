@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,7 +86,7 @@ namespace Evaluator
         {
             if (!lexer.TryConsumeTokenType(TokenType.OperatorMinus, TokenType.OperatorPlus, out var foundTokenType))
             {
-                return ParsePrimary();
+                return ParseExponent();
             }
             var operators = new List<TokenType>();
             operators.Add(foundTokenType);
@@ -94,7 +95,7 @@ namespace Evaluator
                 operators.Add(foundTokenType);
             }
 
-            var right = ParsePrimary();
+            var right = ParseExponent();
             if (right is null)
             {
                 throw new ParseException();
@@ -115,6 +116,22 @@ namespace Evaluator
                 }
             }
             return right;
+        }
+
+        private AstNode? ParseExponent()
+        {
+            var left = ParsePrimary();
+            if (left is null)
+                return null;
+            while (lexer.TryConsumeTokenType(TokenType.OperatorExponent))
+            {
+                var right = ParsePrimary();
+                if (right is null)
+                    throw new Exception();
+                left = new BinaryNode(left, BinaryOperator.Exponent, right);
+            }
+
+            return left;
         }
         private AstNode? ParsePrimary()
         {

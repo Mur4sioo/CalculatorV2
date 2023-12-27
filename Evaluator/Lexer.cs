@@ -82,11 +82,14 @@ namespace Evaluator
             //    return false;
             //}
             SkipWhiteSpace();
+            var remaining = GetRemainingText();
             var (tokenType, lenght, value) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
                 [>= '0' and <= '9', ..] => GetNumberTokenInfo(remaining),
                 ['.', ..] => GetNumberTokenInfo(remaining),
+                ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
+                [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
                 ['/', ..] => new TokenInfo(TokenType.OperatorDivide, 1),
                 ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
@@ -97,10 +100,10 @@ namespace Evaluator
             this.Current = new Token(tokenType, value);
             this.index += lenght;
             return lenght > 0;
+        }
 
-            
 
-            //var firstCharacter = remaining[0];
+        //var firstCharacter = remaining[0];
             //if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
             //{
             //    this.Current = new Token(tokenType, 0);
@@ -118,7 +121,6 @@ namespace Evaluator
             //}
 
             //return false;
-        }
 
         public bool TryConsumeTokenType(TokenType tokenType, out double number)
         {
