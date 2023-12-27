@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -15,9 +16,9 @@ namespace Evaluator
             this.lexer = lexer;
         }
 
-        public static AstNode ParseExpression(string input)
+        public static AstNode ParseExpression(string input, CultureInfo? culture = null)
         {
-            var lexer = new Lexer(input);
+            var lexer = new Lexer(input, culture);
             var parser = new Parser(lexer);
             var result = parser.ParseExpression();
             if (result is null)
@@ -125,7 +126,7 @@ namespace Evaluator
                 return null;
             while (lexer.TryConsumeTokenType(TokenType.OperatorExponent))
             {
-                var right = ParsePrimary();
+                var right = ParseExponent();
                 if (right is null)
                     throw new Exception();
                 left = new BinaryNode(left, BinaryOperator.Exponent, right);

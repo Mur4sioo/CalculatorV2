@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,10 @@ namespace Evaluator
     {
         private readonly string text;
         private int index;
-        public Lexer(string text)
+        private readonly CultureInfo culture;
+        public Lexer(string text, CultureInfo? culture)
         {
+            this.culture = culture ?? CultureInfo.CurrentCulture;
             this.text = text;
             Read();
         }
@@ -36,26 +39,44 @@ namespace Evaluator
             }
         }
 
-        private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text)
+        private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text, CultureInfo culture)
         {
-            var lenght = CountNumberOrDecimal(text);
+            var lenght = CountNumberOrDecimal(text, culture.NumberFormat.NumberDecimalSeparator);
             var numberPart = text.Slice(0, lenght);
-            return new TokenInfo(double.Parse(numberPart), lenght);
+            return new TokenInfo(double.Parse(numberPart, culture), lenght);
         }
 
         public Token Current { get; private set; } = Token.Unknown;
         public bool IsFinished { get; private set; }
         public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
-        private static bool IsNumberOrDecimal(char ch) => ch == ',' || char.IsAsciiDigit(ch);
 
-        private static int CountNumberOrDecimal(ReadOnlySpan<char> text)
+        private static bool IsNumberOrDecimal(ReadOnlySpan<char> text, string separator)
         {
-            for (var i = 0; i < text.Length; i++)
+            return text.StartsWith(separator) || char.IsAsciiDigit(text[0]);
+        }
+
+        private static int CountNumberOrDecimal(ReadOnlySpan<char> text , string separator)
+        {
+            var lenght = 0;
+            while (text.IsEmpty is false)
             {
-                if (IsNumberOrDecimal(text[i]) is false)
-                    return i;
+                if (text.StartsWith(separator))
+                {
+                    lenght += separator.Length;
+                    text = text.Slice(separator.Length);
+                }
+                else if (char.IsAsciiDigit(text[0]))
+                {
+                    lenght += 1;
+                    text = text.Slice(1);
+                }
+                else
+                {
+                    return lenght;
+                }
             }
-            return text.Length;
+
+            return lenght;
         }
 
         private void SkipWhiteSpace()
@@ -76,18 +97,13 @@ namespace Evaluator
 
         public bool Read()
         {
-            //if (IsFinished)
-            //{
-            //    this.Current = Token.Unknown;
-            //    return false;
-            //}
             SkipWhiteSpace();
             var remaining = GetRemainingText();
             var (tokenType, lenght, value) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
-                [>= '0' and <= '9', ..] => GetNumberTokenInfo(remaining),
-                ['.', ..] => GetNumberTokenInfo(remaining),
+                _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
+                => GetNumberTokenInfo(remaining, this.culture),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
@@ -99,28 +115,9 @@ namespace Evaluator
             };
             this.Current = new Token(tokenType, value);
             this.index += lenght;
+            this.IsFinished = lenght == 0;
             return lenght > 0;
         }
-
-
-        //var firstCharacter = remaining[0];
-            //if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
-            //{
-            //    this.Current = new Token(tokenType, 0);
-            //    index++;
-            //    return true;
-            //}
-
-            //if (IsNumberOrDecimal(firstCharacter))
-            //{
-            //    var length = CountNumberOrDecimal(remaining);
-            //    var numberPart = remaining.Slice(0, length);
-            //    this.Current = new Token(TokenType.Number, double.Parse(numberPart));
-            //    index += length;
-            //    return true;
-            //}
-
-            //return false;
 
         public bool TryConsumeTokenType(TokenType tokenType, out double number)
         {

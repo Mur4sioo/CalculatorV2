@@ -1,3 +1,4 @@
+using System.Globalization;
 using Evaluator;
 
 namespace TestProject4
@@ -39,12 +40,12 @@ namespace TestProject4
         [TestMethod]
         public void TestAdditive()
         {
-            var actual = Parser.ParseExpression("1.2 * 2") as BinaryNode;
+            var actual = Parser.ParseExpression("1,2 * 2") as BinaryNode;
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
             Assert.AreEqual(BinaryOperator.Multiply, actual.Operator);
-            Assert.AreEqual(1d, (actual.Left as NumberNode).Value); 
+            Assert.AreEqual(1.2d, (actual.Left as NumberNode).Value); 
             Assert.AreEqual(2d, (actual.Right as NumberNode).Value);
         }
         [TestMethod]
@@ -67,6 +68,30 @@ namespace TestProject4
             var math = engine.Evaluate("-5----7");
             double actual = 2;
             Assert.AreEqual(actual, math);
+        }
+        [TestMethod]
+        public void TestEnUsCulture()
+        {
+            var culture = CultureInfo.GetCultureInfo("en-US");
+            string math = "1.2";
+            var actual = engine.Evaluate(math, culture);
+            Assert.AreEqual(1.2d, actual);
+        }
+        [TestMethod]
+        public void TestFrFrCulture()
+        {
+            var culture = CultureInfo.GetCultureInfo("fr-FR");
+            string math = "1,2";
+            var actual = engine.Evaluate(math, culture);
+            Assert.AreEqual(1.2d, actual);
+        }
+        [TestMethod]
+        public void TestCurrentCulture()
+        {
+            var culture = CultureInfo.CurrentCulture;
+            string math = "1" + culture.NumberFormat.NumberDecimalSeparator + "2";
+            var actual = engine.Evaluate(math, culture);
+            Assert.AreEqual(1.2d, actual);
         }
     }
 }

@@ -71,25 +71,7 @@ namespace Calculator
 
         private void decimal_point_Click(object sender, EventArgs e)
         {
-            var last_char = math.Text[^1];
-            bool lastchar = last_char is not ('+' or '-' or '*' or '/');
-            while (accept_decimal)
-            {
-
-                if (lastchar == true)
-                {
-                    math.Text += ((Button)sender).Text;
-                    accept_digit = true;
-                    accept_operator = false;
-                    accept_decimal = false;
-                    break;
-                }
-                else
-                {
-                    break;
-                }
-
-            }
+            math.Text += ((Button)sender).Text;
         }
     }
 }
