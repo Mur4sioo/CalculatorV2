@@ -28,7 +28,7 @@ namespace Evaluator
         public Token Current { get; private set; } = Token.Unknown;
         public bool IsFinished { get; private set; }
         public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
-        private static bool IsNumberOrDecimal(char ch) => ch == '.' || char.IsAsciiDigit(ch);
+        private static bool IsNumberOrDecimal(char ch) => ch == ',' || char.IsAsciiDigit(ch);
 
         private static int CountNumberOrDecimal(ReadOnlySpan<char> text)
         {

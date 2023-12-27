@@ -59,7 +59,14 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-            math.Text += '=' + (engine.Evaluate(math.Text)).ToString();
+            //try
+            //{
+                math.Text += '=' + (engine.Evaluate(math.Text)).ToString();
+            //}
+            //catch (Exception ex)
+            //{
+            //    math.Text = $"Error : {ex}";
+            //}
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
@@ -81,6 +88,7 @@ namespace Calculator
                 {
                     break;
                 }
+
             }
         }
     }

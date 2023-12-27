@@ -249,6 +249,7 @@
             button1.TabIndex = 19;
             button1.Text = "(";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += NumClick_Click;
             // 
             // button14
             // 
@@ -258,6 +259,7 @@
             button14.TabIndex = 20;
             button14.Text = ")";
             button14.UseVisualStyleBackColor = true;
+            button14.Click += NumClick_Click;
             // 
             // Calculator
             // 

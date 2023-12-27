@@ -16,6 +16,7 @@ namespace Evaluator
         Subtract,
         Multiply,
         Divide,
+        Exponent,
     }
     public enum UnaryOperator
     {

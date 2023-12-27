@@ -39,7 +39,7 @@ namespace TestProject4
         [TestMethod]
         public void TestAdditive()
         {
-            var actual = Parser.ParseExpression("1 * 2") as BinaryNode;
+            var actual = Parser.ParseExpression("1.2 * 2") as BinaryNode;
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
