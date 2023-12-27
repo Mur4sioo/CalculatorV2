@@ -25,6 +25,24 @@ namespace Evaluator
             { '*', TokenType.OperatorMultiply },
             { '/', TokenType.OperatorDivide },
         };
+
+        private readonly record struct TokenInfo(TokenType Type, int Lenght, double Value = 0)
+        {
+
+            public TokenInfo(double Value, int lenght)
+                : this(TokenType.Number, lenght, Value)
+            {
+
+            }
+        }
+
+        private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text)
+        {
+            var lenght = CountNumberOrDecimal(text);
+            var numberPart = text.Slice(0, lenght);
+            return new TokenInfo(double.Parse(numberPart), lenght);
+        }
+
         public Token Current { get; private set; } = Token.Unknown;
         public bool IsFinished { get; private set; }
         public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
@@ -55,41 +73,53 @@ namespace Evaluator
             }
             return text.Length;
         }
+
         public bool Read()
         {
-            if (IsFinished)
-            {
-                this.Current = Token.Unknown;
-                return false;
-            }
-
+            //if (IsFinished)
+            //{
+            //    this.Current = Token.Unknown;
+            //    return false;
+            //}
             SkipWhiteSpace();
-            var remaining = GetRemainingText();
-            if (remaining.IsEmpty)
+            var (tokenType, lenght, value) = remaining switch
             {
-                this.IsFinished = true;
-                this.Current = Token.Unknown;
-                return false;
-            }
-            var firstCharacter = remaining[0];
-            if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
-            {
-                this.Current = new Token(tokenType, 0);
-                index++;
-                return true;
-            }
+                [] => new TokenInfo(TokenType.Unknown, 0),
+                [>= '0' and <= '9', ..] => GetNumberTokenInfo(remaining),
+                ['.', ..] => GetNumberTokenInfo(remaining),
+                ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
+                ['/', ..] => new TokenInfo(TokenType.OperatorDivide, 1),
+                ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
+                ['+', ..] => new TokenInfo(TokenType.OperatorPlus, 1),
+                ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
+                _ => new TokenInfo(TokenType.Unknown, 1)
+            };
+            this.Current = new Token(tokenType, value);
+            this.index += lenght;
+            return lenght > 0;
 
-            if (IsNumberOrDecimal(firstCharacter))
-            {
-                var length = CountNumberOrDecimal(remaining);
-                var numberPart = remaining.Slice(0, length);
-                this.Current = new Token(TokenType.Number, double.Parse(numberPart));
-                index += length;
-                return true;
-            }
+            
 
-            return false;
+            //var firstCharacter = remaining[0];
+            //if (singleCharTokens.TryGetValue(firstCharacter, out var tokenType) is true)
+            //{
+            //    this.Current = new Token(tokenType, 0);
+            //    index++;
+            //    return true;
+            //}
+
+            //if (IsNumberOrDecimal(firstCharacter))
+            //{
+            //    var length = CountNumberOrDecimal(remaining);
+            //    var numberPart = remaining.Slice(0, length);
+            //    this.Current = new Token(TokenType.Number, double.Parse(numberPart));
+            //    index += length;
+            //    return true;
+            //}
+
+            //return false;
         }
+
         public bool TryConsumeTokenType(TokenType tokenType, out double number)
         {
             number = 0;
