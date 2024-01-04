@@ -17,6 +17,7 @@ namespace Evaluator
         ParenOpen,
         ParenClose,
         OperatorExponent,
+        Identifier,
     }
     
 }

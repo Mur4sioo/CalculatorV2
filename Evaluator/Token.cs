@@ -4,4 +4,5 @@
     {
         public static Token Unknown { get; } = new Token(TokenType.Unknown, 0);
     }
+
 }

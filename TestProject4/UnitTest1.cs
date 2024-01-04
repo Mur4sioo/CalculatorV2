@@ -7,14 +7,16 @@ namespace TestProject4
     public class UnitTest1
     {
         CalculatorEngine engine = new CalculatorEngine();
+
         [TestMethod]
         public void TestMethod1()
         {
             string math = "1+2";
             string result = "3";
             string actual = engine.Evaluate(math).ToString();
-            Assert.AreEqual(result,actual);
+            Assert.AreEqual(result, actual);
         }
+
         [TestMethod]
         public void TestMethod2()
         {
@@ -23,6 +25,7 @@ namespace TestProject4
             string actual = engine.Evaluate(math).ToString();
             Assert.AreEqual(result, actual);
         }
+
         [TestMethod]
         public void TestTokenization()
         {
@@ -37,6 +40,7 @@ namespace TestProject4
             result.Add(new Token(TokenType.ParenClose, 0));
             CollectionAssert.AreEqual(result, tokens);
         }
+
         [TestMethod]
         public void TestAdditive()
         {
@@ -45,9 +49,10 @@ namespace TestProject4
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
             Assert.AreEqual(BinaryOperator.Multiply, actual.Operator);
-            Assert.AreEqual(1.2d, (actual.Left as NumberNode).Value); 
+            Assert.AreEqual(1.2d, (actual.Left as NumberNode).Value);
             Assert.AreEqual(2d, (actual.Right as NumberNode).Value);
         }
+
         [TestMethod]
         public void TestEvaluate()
         {
@@ -55,6 +60,7 @@ namespace TestProject4
             double actual = 12;
             Assert.AreEqual(actual, math);
         }
+
         [TestMethod]
         public void TestNegation()
         {
@@ -62,6 +68,7 @@ namespace TestProject4
             double actual = 2;
             Assert.AreEqual(actual, math);
         }
+
         [TestMethod]
         public void TestNegation2()
         {
@@ -69,6 +76,7 @@ namespace TestProject4
             double actual = 2;
             Assert.AreEqual(actual, math);
         }
+
         [TestMethod]
         public void TestEnUsCulture()
         {
@@ -77,6 +85,7 @@ namespace TestProject4
             var actual = engine.Evaluate(math, culture);
             Assert.AreEqual(1.2d, actual);
         }
+
         [TestMethod]
         public void TestFrFrCulture()
         {
@@ -85,6 +94,7 @@ namespace TestProject4
             var actual = engine.Evaluate(math, culture);
             Assert.AreEqual(1.2d, actual);
         }
+
         [TestMethod]
         public void TestCurrentCulture()
         {
@@ -92,6 +102,22 @@ namespace TestProject4
             string math = "1" + culture.NumberFormat.NumberDecimalSeparator + "2";
             var actual = engine.Evaluate(math, culture);
             Assert.AreEqual(1.2d, actual);
+        }
+
+        [TestMethod]
+        public void TestIdentifier()
+        {
+            var tokens = CalculatorEngine.Tokenization("1+(xy-4)");
+            List<Token> result = new List<Token>();
+            result.Add(new Token(TokenType.Number, 1));
+            result.Add(new Token(TokenType.OperatorPlus, 0));
+            result.Add(new Token(TokenType.ParenOpen, 0));
+            result.Add(new Token(TokenType.Identifier, 0));
+            result.Add(new Token(TokenType.Identifier, 0));
+            result.Add(new Token(TokenType.OperatorMinus, 0));
+            result.Add(new Token(TokenType.Number, 4));
+            result.Add(new Token(TokenType.ParenClose, 0));
+            CollectionAssert.AreEqual(result, tokens);
         }
     }
 }

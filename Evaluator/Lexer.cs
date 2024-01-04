@@ -104,6 +104,7 @@ namespace Evaluator
                 [] => new TokenInfo(TokenType.Unknown, 0),
                 _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
                 => GetNumberTokenInfo(remaining, this.culture),
+                _ when char.IsAsciiLetter(remaining[0])=> new TokenInfo(TokenType.Identifier, 1),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),

@@ -136,7 +136,7 @@ namespace Evaluator
         }
         private AstNode? ParsePrimary()
         {
-            return ParseParenthetical() ?? ParseNumber();
+            return ParseParenthetical()?? ParseVariable() ?? ParseNumber();
         }
 
         private AstNode? ParseParenthetical()
@@ -151,6 +151,19 @@ namespace Evaluator
                 throw new ParseException();
             }
             return null;
+        }
+
+        private AstNode? ParseVariable()
+        {
+            if (lexer.TryConsumeTokenType(TokenType.Identifier))
+            {
+
+                return new VariableNode();
+            }
+            else
+            {
+                throw new ParseException();
+            }
         }
         private AstNode? ParseNumber()
         {

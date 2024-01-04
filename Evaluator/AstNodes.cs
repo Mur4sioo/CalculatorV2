@@ -17,6 +17,7 @@ namespace Evaluator
         Multiply,
         Divide,
         Exponent,
+        Variable,
     }
     public enum UnaryOperator
     {
@@ -27,6 +28,14 @@ namespace Evaluator
     public abstract record AstNode
     {
         public abstract double Evaluate();
+    }
+
+    public record VariableNode(string name)
+    {
+        public double Evaluate()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public sealed record NumberNode(double Value) : AstNode
