@@ -109,14 +109,23 @@ namespace TestProject4
         {
             var tokens = CalculatorEngine.Tokenization("1+(x-4)");
             List<Token> result = new List<Token>();
-            result.Add(new Token(TokenType.Number, 1));
-            result.Add(new Token(TokenType.OperatorPlus, 0));
-            result.Add(new Token(TokenType.ParenOpen, 0));
-            result.Add(new Token(TokenType.Identifier, 0));
-            result.Add(new Token(TokenType.OperatorMinus, 0));
-            result.Add(new Token(TokenType.Number, 4));
-            result.Add(new Token(TokenType.ParenClose, 0));
+            result.Add(new Token(TokenType.Number, 1, string.Empty));
+            result.Add(new Token(TokenType.OperatorPlus, 0, string.Empty));
+            result.Add(new Token(TokenType.ParenOpen, 0, string.Empty));
+            result.Add(new Token(TokenType.Identifier, 0, "x"));
+            result.Add(new Token(TokenType.OperatorMinus, 0, string.Empty));
+            result.Add(new Token(TokenType.Number, 4, string.Empty));
+            result.Add(new Token(TokenType.ParenClose, 0, string.Empty));
             CollectionAssert.AreEqual(result, tokens);
+        }
+
+        [TestMethod]
+        public void TestVariables()
+        {
+            var variables = new Dictionary<string, double>();
+            variables.Add("x", 1);
+            variables.Add("y", 2);
+            Assert.AreEqual(3, CalculatorEngine.Evaluate("x+y", variables));
         }
     }
 }

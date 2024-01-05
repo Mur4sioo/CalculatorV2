@@ -27,12 +27,12 @@ namespace Evaluator
 
     public abstract record AstNode
     {
-        public abstract double Evaluate();
+        public abstract double Evaluate(IReadOnlyDictionary<string, char>? variables);
     }
 
     public record VariableNode(string name) : AstNode
     {
-        public override double Evaluate()
+        public override double Evaluate(IReadOnlyDictionary<string, char>? variables)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +40,7 @@ namespace Evaluator
 
     public sealed record NumberNode(double Value) : AstNode
     {
-        public override double Evaluate()
+        public override double Evaluate(IReadOnlyDictionary<string, char>? variables)
         {
             return Value;
         }
@@ -48,9 +48,9 @@ namespace Evaluator
 
     public sealed record UnaryNode(UnaryOperator Operator, AstNode Value) : AstNode
     {
-        public override double Evaluate()
+        public override double Evaluate(IReadOnlyDictionary<string, char>? variables)
         {
-            var result = Value.Evaluate();
+            var result = Value.Evaluate(variables);
             switch (Operator)
             {
                 case UnaryOperator.Negate:
@@ -65,10 +65,10 @@ namespace Evaluator
     
     public sealed record BinaryNode(AstNode Left, BinaryOperator Operator, AstNode Right) : AstNode
     {
-        public override double Evaluate()
+        public override double Evaluate(IReadOnlyDictionary<string, char>? variables)
         {
-            var x = Left.Evaluate();
-            var y = Right.Evaluate();
+            var x = Left.Evaluate(variables);
+            var y = Right.Evaluate(variables);
             if (Operator == BinaryOperator.Add)
             {
                 return x + y;

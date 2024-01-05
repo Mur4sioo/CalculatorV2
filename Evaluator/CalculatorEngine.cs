@@ -6,13 +6,17 @@ namespace Evaluator
 {
     public class CalculatorEngine
     {
-        private static readonly char[] Operators = { '+', '-', '*', '/' };
 
-        public double Evaluate(string math, CultureInfo? culture = null)
+        public double Evaluate(string math, IReadOnlyDictionary<string, char>? variables= null, CultureInfo? culture = null)
         {
             var ast = Parser.ParseExpression(math, culture);
-            return Math.Round(ast.Evaluate(),2);
+            return Math.Round(ast.Evaluate(variables),2);
             
+        }
+
+        public double Evaluate(string math, CultureInfo culture, IReadOnlyDictionary<string, char>? variables = null)
+        {
+            return Evaluate(math, culture, variables);
         }
         public static List<Token> Tokenization(string math, CultureInfo? culture = null)
         {
