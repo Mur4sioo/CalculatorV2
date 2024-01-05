@@ -155,14 +155,14 @@ namespace Evaluator
 
         private AstNode? ParseVariable()
         {
-            if (lexer.TryConsumeTokenType(TokenType.Identifier))
+            if (lexer.TryConsumeIdentifier(out var text))
             {
 
-                return new VariableNode();
+                return new VariableNode(text);
             }
             else
             {
-                throw new ParseException();
+                return null;
             }
         }
         private AstNode? ParseNumber()

@@ -29,13 +29,20 @@ namespace Evaluator
             { '/', TokenType.OperatorDivide },
         };
 
-        private readonly record struct TokenInfo(TokenType Type, int Lenght, double Value = 0)
+        private readonly record struct TokenInfo(TokenType Type, int Lenght, double Value, string Text)
         {
-
-            public TokenInfo(double Value, int lenght)
-                : this(TokenType.Number, lenght, Value)
+            public TokenInfo(TokenType type, int lenght) : this(type, lenght, 0, string.Empty)
             {
 
+            }
+            public TokenInfo(string Value)
+                : this(TokenType.Identifier, Value.Length, 0, Value)
+            {
+            }
+
+            public TokenInfo(double Value, int lenght)
+                : this(TokenType.Number, lenght, Value, string.Empty)
+            {
             }
         }
 
@@ -99,12 +106,12 @@ namespace Evaluator
         {
             SkipWhiteSpace();
             var remaining = GetRemainingText();
-            var (tokenType, lenght, value) = remaining switch
+            var (tokenType, lenght, value, tokenText) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
                 _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
                 => GetNumberTokenInfo(remaining, this.culture),
-                _ when char.IsAsciiLetter(remaining[0])=> new TokenInfo(TokenType.Identifier, 1),
+                _ when char.IsAsciiLetter(remaining[0])=> new TokenInfo(remaining[0].ToString()),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
@@ -114,30 +121,32 @@ namespace Evaluator
                 ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
                 _ => new TokenInfo(TokenType.Unknown, 1)
             };
-            this.Current = new Token(tokenType, value);
+            this.Current = new Token(tokenType, value, tokenText);
             this.index += lenght;
             this.IsFinished = lenght == 0;
             return lenght > 0;
         }
 
-        public bool TryConsumeTokenType(TokenType tokenType, out double number)
+        public bool TryConsumeTokenType(TokenType tokenType, out double number, out string tokenText)
         {
             number = 0;
+            tokenText = string.Empty;
             if (IsFinished || this.Current.TokenType != tokenType)
             {
                 return false;
             }
             number = this.Current.Number;
+            tokenText = this.Current.Text;
             Read();
             return true;
         }
         public bool TryConsumeTokenType(TokenType tokenType)
         {
-            return TryConsumeTokenType(tokenType, out _);
+            return TryConsumeTokenType(tokenType, out _, out _);
         }
         public bool TryConsumeNumber(out double number)
         {
-            return TryConsumeTokenType(TokenType.Number, out number);
+            return TryConsumeTokenType(TokenType.Number, out number, out _);
         }
         public bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
         {
@@ -155,6 +164,11 @@ namespace Evaluator
 
             found = default;
             return false;
+        }
+
+        public bool TryConsumeIdentifier(out string tokenText)
+        {
+            return TryConsumeTokenType(TokenType.Identifier, out _, out tokenText);
         }
     }
 }

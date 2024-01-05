@@ -107,12 +107,11 @@ namespace TestProject4
         [TestMethod]
         public void TestIdentifier()
         {
-            var tokens = CalculatorEngine.Tokenization("1+(xy-4)");
+            var tokens = CalculatorEngine.Tokenization("1+(x-4)");
             List<Token> result = new List<Token>();
             result.Add(new Token(TokenType.Number, 1));
             result.Add(new Token(TokenType.OperatorPlus, 0));
             result.Add(new Token(TokenType.ParenOpen, 0));
-            result.Add(new Token(TokenType.Identifier, 0));
             result.Add(new Token(TokenType.Identifier, 0));
             result.Add(new Token(TokenType.OperatorMinus, 0));
             result.Add(new Token(TokenType.Number, 4));

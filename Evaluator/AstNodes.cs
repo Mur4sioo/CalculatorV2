@@ -30,9 +30,9 @@ namespace Evaluator
         public abstract double Evaluate();
     }
 
-    public record VariableNode(string name)
+    public record VariableNode(string name) : AstNode
     {
-        public double Evaluate()
+        public override double Evaluate()
         {
             throw new NotImplementedException();
         }
