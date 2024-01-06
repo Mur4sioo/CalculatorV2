@@ -7,12 +7,9 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            var i = 0;
-            var result = CalculatorEngine.Tokenization("1+2+3", CultureInfo.CurrentCulture);
-            foreach (var t in result)
+            foreach (var x in FunctionList.Functions)
             {
-                Console.WriteLine(result[i]);
-                i++;
+                Console.WriteLine(x);
             }
         }
     }

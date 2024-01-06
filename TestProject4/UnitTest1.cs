@@ -116,7 +116,7 @@ namespace TestProject4
             result.Add(new Token(TokenType.OperatorMinus, 0, string.Empty));
             result.Add(new Token(TokenType.Number, 4, string.Empty));
             result.Add(new Token(TokenType.ParenClose, 0, string.Empty));
-            CollectionAssert.AreEqual(result, tokens);
+            CollectionAssert.AreEqual(result, tokens);  
         }
 
         [TestMethod]
@@ -124,8 +124,8 @@ namespace TestProject4
         {
             var variables = new Dictionary<string, double>();
             variables.Add("x", 1);
-            variables.Add("y", 2);
-            Assert.AreEqual(3, CalculatorEngine.Evaluate("x+y", variables));
+            variables.Add("y", 2);      
+            Assert.AreEqual(3, engine.Evaluate("x+y", variables));
         }
     }
 }
