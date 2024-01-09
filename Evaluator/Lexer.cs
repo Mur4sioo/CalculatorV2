@@ -52,6 +52,38 @@ namespace Evaluator
             var numberPart = text.Slice(0, lenght);
             return new TokenInfo(double.Parse(numberPart, culture), lenght);
         }
+        private static int CountCharInFunction(ReadOnlySpan<char> text, string? separator = null)
+        {
+            var lenght = 0;
+            while (text.IsEmpty is false)
+            {
+                if (char.IsAsciiLetter(text[0]))
+                {
+                    lenght += 1;
+                    text = text.Slice(1);
+                }
+            }
+            return lenght;
+        }
+
+        public static bool IsFunction(ReadOnlySpan<char> text)
+        {
+            foreach (var func in FunctionList.Functions)
+            {
+                if (text.Equals(func.Name,StringComparison.Ordinal))
+                    return true;
+            }
+            return false;
+        }
+        private static TokenInfo GeIdentifierInfo(ReadOnlySpan<char> text, CultureInfo culture)
+        {
+            var lenght = CountCharInFunction(text);
+            var functionPart = text.Slice(0, lenght);
+            if (IsFunction(functionPart))
+                return new TokenInfo(functionPart.ToString());
+            return new TokenInfo(functionPart.Slice(0, 1).ToString());
+
+        }
 
         public Token Current { get; private set; } = Token.Unknown;
         public bool IsFinished { get; private set; }
@@ -110,8 +142,9 @@ namespace Evaluator
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
                 _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
-                => GetNumberTokenInfo(remaining, this.culture),
-                _ when char.IsAsciiLetter(remaining[0])=> new TokenInfo(remaining[0].ToString()),
+                    => GetNumberTokenInfo(remaining, this.culture),
+                _ when char.IsAsciiLetter(remaining[0])
+                    => GeIdentifierInfo(remaining,this.culture),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
