@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -29,19 +30,23 @@ namespace Evaluator
             { '/', TokenType.OperatorDivide },
         };
 
-        private readonly record struct TokenInfo(TokenType Type, int Lenght, double Value, string Text)
+        private readonly record struct TokenInfo(TokenType Type, int Lenght, double Value, string Text, FunctionInfo Function)
         {
-            public TokenInfo(TokenType type, int lenght) : this(type, lenght, 0, string.Empty)
+            public TokenInfo(TokenType type, int lenght) : this(type, lenght, 0, string.Empty, default)
             {
 
             }
             public TokenInfo(string Value)
-                : this(TokenType.Identifier, Value.Length, 0, Value)
+                : this(TokenType.Identifier, Value.Length, 0, Value, default)
+            {
+            }
+            public TokenInfo(FunctionInfo Value)
+                : this(TokenType.Function, Value.Name.Length, 0, Value.Name, Value)
             {
             }
 
             public TokenInfo(double Value, int lenght)
-                : this(TokenType.Number, lenght, Value, string.Empty)
+                : this(TokenType.Number, lenght, Value, string.Empty, default)
             {
             }
         }
@@ -62,25 +67,33 @@ namespace Evaluator
                     lenght += 1;
                     text = text.Slice(1);
                 }
+                else
+                {
+                    return lenght;
+                }
             }
             return lenght;
         }
 
-        public static bool IsFunction(ReadOnlySpan<char> text)
+        public static bool IsFunction(ReadOnlySpan<char> text, out FunctionInfo function)
         {
             foreach (var func in FunctionList.Functions)
             {
-                if (text.Equals(func.Name,StringComparison.Ordinal))
-                    return true;
+                if (text.Equals(func.Name, StringComparison.Ordinal))
+                { 
+                function = func;
+                return true;
+                }
             }
+            function = default;
             return false;
         }
         private static TokenInfo GeIdentifierInfo(ReadOnlySpan<char> text, CultureInfo culture)
         {
             var lenght = CountCharInFunction(text);
             var functionPart = text.Slice(0, lenght);
-            if (IsFunction(functionPart))
-                return new TokenInfo(functionPart.ToString());
+            if (IsFunction(functionPart, out var functuion))
+                return new TokenInfo(functuion);
             return new TokenInfo(functionPart.Slice(0, 1).ToString());
 
         }
@@ -138,7 +151,7 @@ namespace Evaluator
         {
             SkipWhiteSpace();
             var remaining = GetRemainingText();
-            var (tokenType, lenght, value, tokenText) = remaining switch
+            var (tokenType, lenght, value, tokenText, function) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
                 _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
@@ -152,34 +165,37 @@ namespace Evaluator
                 ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
                 ['+', ..] => new TokenInfo(TokenType.OperatorPlus, 1),
                 ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
+                [',',..] => new TokenInfo(TokenType.Comma, 1),
                 _ => new TokenInfo(TokenType.Unknown, 1)
             };
-            this.Current = new Token(tokenType, value, tokenText);
+            this.Current = new Token(tokenType, value, tokenText, function);
             this.index += lenght;
             this.IsFinished = lenght == 0;
             return lenght > 0;
         }
 
-        public bool TryConsumeTokenType(TokenType tokenType, out double number, out string tokenText)
+        public bool TryConsumeTokenType(TokenType tokenType, out double number, out string tokenText, out FunctionInfo function)
         {
             number = 0;
             tokenText = string.Empty;
+            function = default;
             if (IsFinished || this.Current.TokenType != tokenType)
             {
                 return false;
             }
             number = this.Current.Number;
             tokenText = this.Current.Text;
+            function = this.Current.function;
             Read();
             return true;
         }
         public bool TryConsumeTokenType(TokenType tokenType)
         {
-            return TryConsumeTokenType(tokenType, out _, out _);
+            return TryConsumeTokenType(tokenType, out _, out _, out _);
         }
         public bool TryConsumeNumber(out double number)
         {
-            return TryConsumeTokenType(TokenType.Number, out number, out _);
+            return TryConsumeTokenType(TokenType.Number, out number, out _, out _);
         }
         public bool TryConsumeTokenType(TokenType a, TokenType b, out TokenType found)
         {
@@ -201,7 +217,11 @@ namespace Evaluator
 
         public bool TryConsumeIdentifier(out string tokenText)
         {
-            return TryConsumeTokenType(TokenType.Identifier, out _, out tokenText);
+            return TryConsumeTokenType(TokenType.Identifier, out _, out tokenText, out _);
+        }
+        public bool TryConsumeFunction (out FunctionInfo function)
+        {
+            return TryConsumeTokenType(TokenType.Function, out _, out _, out function);
         }
     }
 }

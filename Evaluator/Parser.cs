@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace Evaluator
 {
@@ -136,7 +137,7 @@ namespace Evaluator
         }
         private AstNode? ParsePrimary()
         {
-            return ParseParenthetical()?? ParseVariable() ?? ParseNumber();
+            return ParseParenthetical()?? ParseFunction()?? ParseVariable() ?? ParseNumber();
         }
 
         private AstNode? ParseParenthetical()
@@ -152,7 +153,44 @@ namespace Evaluator
             }
             return null;
         }
+        private AstNode? ParseFunction() 
+        {
+            if (!lexer.TryConsumeFunction(out var functionInfo))
+                return null;
+            var functionName = functionInfo.Name;
+            var requiredArgumentCount = functionInfo.Arity;
+            if (!lexer.TryConsumeTokenType(TokenType.ParenOpen))
+                throw new ParseException($"'(' is required after a function name.");
+            var arguments = new List<AstNode>(functionInfo.Arity);
+            var argument = this.ParseExpression();
+            if (argument is null) throw new ParseException("A function argument is expected.");
+            arguments.Add(argument);
+            while (this.lexer.TryConsumeTokenType(TokenType.Comma))
+            {
+                argument = this.ParseExpression();
+                if (argument is null)
+                    throw new ParseException("A function argument is expected.");
+                arguments.Add(argument);
+            }
+            if (!this.lexer.TryConsumeTokenType(TokenType.ParenClose))
+                throw new ParseException("A ')' is required after a function's argument list");
+            return FunctionNode.Create(functionInfo.Name, arguments);
+        }
+        /*
+        primary
+        : parenthetical
+        | functionCall
+        | variable
+        | number;
 
+        functionCall:
+        TokenType_Function
+        TokenType_OpenParen
+        expression
+        ( TokenType_Comma expression )*
+        TokenType_CloseParen
+        ;
+         */
         private AstNode? ParseVariable()
         {
             if (lexer.TryConsumeIdentifier(out var text))

@@ -18,6 +18,8 @@ namespace Evaluator
         ParenClose,
         OperatorExponent,
         Identifier,
+        Function,
+        Comma,
     }
     
 }

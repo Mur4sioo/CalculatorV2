@@ -127,5 +127,33 @@ namespace TestProject4
             variables.Add("y", 2);      
             Assert.AreEqual(3, engine.Evaluate("x+y", variables));
         }
+        [TestMethod]
+        public void TestFunctionLexer()
+        {
+            var tokens = CalculatorEngine.Tokenization("1+sqrt(4)-1");
+            List<Token> result = new List<Token>();
+            result.Add(new Token(TokenType.Number, 1, string.Empty));
+            result.Add(new Token(TokenType.OperatorPlus, 0, string.Empty));
+            result.Add(new Token(TokenType.Identifier, 0, "sqrt"));
+            result.Add(new Token(TokenType.ParenOpen, 0, string.Empty));
+            result.Add(new Token(TokenType.Number, 4, string.Empty));
+            result.Add(new Token(TokenType.ParenClose, 0, string.Empty));
+            result.Add(new Token(TokenType.OperatorMinus, 0, string.Empty));
+            result.Add(new Token(TokenType.Number, 1, string.Empty));
+        }
+        [TestMethod]
+        public void TestFunctionSqrt()
+        {
+            var math = engine.Evaluate("sqrt(4)");
+            double actual = 2;
+            Assert.AreEqual(actual, math);
+        }
+        [TestMethod]
+        public void TestFunctionClamp()
+        {
+            var math = engine.Evaluate("clamp(20,1,10)");
+            double actual = 10;
+            Assert.AreEqual(actual, math);
+        }
     }
 }
