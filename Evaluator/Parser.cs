@@ -17,9 +17,10 @@ namespace Evaluator
             this.lexer = lexer;
         }
         
-        public static AstNode ParseExpression(string input, CultureInfo? culture = null)
+        public static AstNode ParseExpression(string input, ExpressionOptions? options = null)
         {
-            var lexer = new Lexer(input, culture);
+            options ??= ExpressionOptions.Default;
+            var lexer = new Lexer(input, options);
             var parser = new Parser(lexer);
             var result = parser.ParseExpression();
             if (result is null)
@@ -137,7 +138,7 @@ namespace Evaluator
         }
         private AstNode? ParsePrimary()
         {
-            return ParseParenthetical()?? ParseFunction()?? ParseVariable() ?? ParseNumber();
+            return ParseParenthetical()?? ParseFunction()?? ParseVariable()?? ParseNumber();
         }
 
         private AstNode? ParseParenthetical()

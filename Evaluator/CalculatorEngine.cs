@@ -7,21 +7,22 @@ namespace Evaluator
     public class CalculatorEngine
     {
 
-        public double Evaluate(string math, IReadOnlyDictionary<string, double>? variables= null, CultureInfo? culture = null)
+        public double Evaluate(string math, IReadOnlyDictionary<string, double>? variables= null, ExpressionOptions? options = null)
         {
-            var ast = Parser.ParseExpression(math, culture);
+            var ast = Parser.ParseExpression(math, options);
             return Math.Round(ast.Evaluate(variables),2);
             
         }
 
-        public double Evaluate(string math, CultureInfo culture, IReadOnlyDictionary<string, double>? variables = null)
+        public double Evaluate(string math, ExpressionOptions options, IReadOnlyDictionary<string, double>? variables = null)
         {
-            return Evaluate(math, variables, culture);
+            return Evaluate(math, variables, options);
         }
-        public static List<Token> Tokenization(string math, CultureInfo? culture = null)
+        public static List<Token> Tokenization(string math, ExpressionOptions? options = null)
         {
+            options ??= ExpressionOptions.Default;
             var list = new List<Token>();
-            var lexer = new Lexer(math, culture);
+            var lexer = new Lexer(math, options);
             do
             {
                 list.Add(lexer.Current);

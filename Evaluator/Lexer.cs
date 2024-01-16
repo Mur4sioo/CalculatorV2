@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,10 +14,10 @@ namespace Evaluator
     {
         private readonly string text;
         private int index;
-        private readonly CultureInfo culture;
-        public Lexer(string text, CultureInfo? culture)
+        private readonly ExpressionOptions options;
+        public Lexer(string text, ExpressionOptions options)
         {
-            this.culture = culture ?? CultureInfo.CurrentCulture;
+            this.options = options;
             this.text = text;
             Read();
         }
@@ -51,11 +53,42 @@ namespace Evaluator
             }
         }
 
-        private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text, CultureInfo culture)
+        private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text, ExpressionOptions options)
         {
-            var lenght = CountNumberOrDecimal(text, culture.NumberFormat.NumberDecimalSeparator);
+            var lenght = CountNumberOrDecimal(text, options.DecimalPointCharacter);
             var numberPart = text.Slice(0, lenght);
-            return new TokenInfo(double.Parse(numberPart, culture), lenght);
+            return new TokenInfo(ParseDouble(numberPart, options.DecimalPointCharacter), lenght);
+        }
+
+        private static double ParseDouble(ReadOnlySpan<char> text, char decimalPointCharacter)
+        {
+            if (decimalPointCharacter != '.' && text.Contains('.'))
+            {
+                throw new FormatException(
+                    $"{text} mixes the use of invariant decimal '.' and user-specified decimal {decimalPointCharacter}");
+            }
+
+            char[]? charArray = null;
+            try
+            {
+                charArray = ArrayPool<char>.Shared.Rent(text.Length);
+                var charSpan = charArray.AsSpan();
+                charSpan = charSpan.Slice(0, text.Length);
+                for (var i = 0; i < text.Length; i++)
+                {
+                    var toCopy = text[i];
+                    if (toCopy == decimalPointCharacter)
+                        toCopy = '.';
+                    charSpan[i] = toCopy;
+                }
+
+                return double.Parse(charSpan, CultureInfo.InvariantCulture);
+            }
+            finally
+            {
+                if (charArray is not null)
+                    ArrayPool<char>.Shared.Return(charArray);
+            }
         }
         private static int CountCharInFunction(ReadOnlySpan<char> text, string? separator = null)
         {
@@ -81,14 +114,14 @@ namespace Evaluator
             {
                 if (text.Equals(func.Name, StringComparison.Ordinal))
                 { 
-                function = func;
-                return true;
+                    function = func;
+                    return true;
                 }
             }
             function = default;
             return false;
         }
-        private static TokenInfo GeIdentifierInfo(ReadOnlySpan<char> text, CultureInfo culture)
+        private static TokenInfo GeIdentifierInfo(ReadOnlySpan<char> text, ExpressionOptions options)
         {
             var lenght = CountCharInFunction(text);
             var functionPart = text.Slice(0, lenght);
@@ -102,20 +135,20 @@ namespace Evaluator
         public bool IsFinished { get; private set; }
         public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
 
-        private static bool IsNumberOrDecimal(ReadOnlySpan<char> text, string separator)
+        private static bool IsNumberOrDecimal(ReadOnlySpan<char> text, char separator)
         {
-            return text.StartsWith(separator) || char.IsAsciiDigit(text[0]);
+            return text[0] == separator || char.IsAsciiDigit(text[0]);
         }
 
-        private static int CountNumberOrDecimal(ReadOnlySpan<char> text , string separator)
+        private static int CountNumberOrDecimal(ReadOnlySpan<char> text , char separator)
         {
             var lenght = 0;
             while (text.IsEmpty is false)
             {
-                if (text.StartsWith(separator))
+                if (text[0] == separator)
                 {
-                    lenght += separator.Length;
-                    text = text.Slice(separator.Length);
+                    lenght += 1;
+                    text = text.Slice(1);
                 }
                 else if (char.IsAsciiDigit(text[0]))
                 {
@@ -151,13 +184,14 @@ namespace Evaluator
         {
             SkipWhiteSpace();
             var remaining = GetRemainingText();
+            var argumentSeparator = this.options.ArgumentSeparator;
             var (tokenType, lenght, value, tokenText, function) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
-                _ when IsNumberOrDecimal(remaining, this.culture.NumberFormat.NumberDecimalSeparator)
-                    => GetNumberTokenInfo(remaining, this.culture),
+                _ when IsNumberOrDecimal(remaining, this.options.DecimalPointCharacter)
+                    => GetNumberTokenInfo(remaining, this.options),
                 _ when char.IsAsciiLetter(remaining[0])
-                    => GeIdentifierInfo(remaining,this.culture),
+                    => GeIdentifierInfo(remaining,this.options),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
                 ['*', '*', ..] or ['^',..] => new TokenInfo(TokenType.OperatorExponent, 2),
@@ -165,7 +199,7 @@ namespace Evaluator
                 ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
                 ['+', ..] => new TokenInfo(TokenType.OperatorPlus, 1),
                 ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
-                ['.',..] => new TokenInfo(TokenType.Comma, 1),
+                [',',..] => new TokenInfo(TokenType.Comma, 1),
                 _ => new TokenInfo(TokenType.Unknown, 1)
             };
             this.Current = new Token(tokenType, value, tokenText, function);

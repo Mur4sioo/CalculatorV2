@@ -21,7 +21,7 @@ namespace Evaluator
         };
     }
     public abstract record OneArgFunctionNode(string Name, AstNode Argument) : FunctionNode(Name);
-    public abstract record MultipleArgFunctionNode (string Name, AstNode value, AstNode minimum, AstNode maximum) : FunctionNode(Name);
+    public abstract record MultipleArgFunctionNode (string Name, AstNode Value, AstNode Minimum, AstNode Maximum) : FunctionNode(Name);
     public sealed record SqrtFunctionNode(AstNode Argument) : OneArgFunctionNode("sqrt", Argument)
     {
         public override double Evaluate(IReadOnlyDictionary<string, double>? variables)

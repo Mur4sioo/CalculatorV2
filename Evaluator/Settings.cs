@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Evaluator
 {
-    internal class ExpressionOptions
+    public sealed class ExpressionOptions
     {
         public ExpressionOptions(char decimalPointCharacter, char argumentSeparator)
         {
@@ -16,14 +16,22 @@ namespace Evaluator
             this.DecimalPointCharacter = decimalPointCharacter;
             Validate();
         }
-        public char ArgumentSeparator { get; }
+
+        public static ExpressionOptions Default { get; } = new(
+            decimalPointCharacter: '.',
+            argumentSeparator: ','
+        );
+        public char ArgumentSeparator { get;  }
         public char DecimalPointCharacter { get; }
+
 
         private void Validate()
         {
             if (this.DecimalPointCharacter == this.ArgumentSeparator)
                 throw new ArgumentException(
                     $"{nameof(this.ArgumentSeparator)} and {nameof(this.DecimalPointCharacter)} cannot be the same.");
+            ValidateCharacterIsValid(this.DecimalPointCharacter);
+            ValidateCharacterIsValid(this.ArgumentSeparator);
 
         }
 

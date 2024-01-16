@@ -11,8 +11,9 @@ namespace TestProject4
         [TestMethod]
         public void TestMethod1()
         {
-            string math = "1+2";
-            string result = "3";
+            var options = ExpressionOptions.Default;
+            string math = "1+2"+options.DecimalPointCharacter+"3";
+            string result = "3"+options.DecimalPointCharacter+"3";
             string actual = engine.Evaluate(math).ToString();
             Assert.AreEqual(result, actual);
         }
@@ -44,7 +45,8 @@ namespace TestProject4
         [TestMethod]
         public void TestAdditive()
         {
-            var actual = Parser.ParseExpression("1,2 * 2") as BinaryNode;
+            var options = ExpressionOptions.Default;
+            var actual = Parser.ParseExpression("1"+options.DecimalPointCharacter+"2 * 2") as BinaryNode;
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Left is NumberNode);
             Assert.IsTrue(actual.Right is NumberNode);
@@ -78,29 +80,29 @@ namespace TestProject4
         }
 
         [TestMethod]
-        public void TestEnUsCulture()
+        public void TestEnUsoptions()
         {
-            var culture = CultureInfo.GetCultureInfo("en-US");
+            var options = ExpressionOptions.Default;
             string math = "1.2";
-            var actual = engine.Evaluate(math, culture);
+            var actual = engine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
         [TestMethod]
-        public void TestFrFrCulture()
+        public void TestFrFroptions()
         {
-            var culture = CultureInfo.GetCultureInfo("fr-FR");
+            var options = ExpressionOptions.Default;
             string math = "1,2";
-            var actual = engine.Evaluate(math, culture);
+            var actual = engine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
         [TestMethod]
-        public void TestCurrentCulture()
+        public void TestCurrentoptions()
         {
-            var culture = CultureInfo.CurrentCulture;
-            string math = "1" + culture.NumberFormat.NumberDecimalSeparator + "2";
-            var actual = engine.Evaluate(math, culture);
+            var options = ExpressionOptions.Default;
+            string math = "1" + options.DecimalPointCharacter + "2";
+            var actual = engine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
@@ -158,9 +160,11 @@ namespace TestProject4
         [TestMethod]
         public void TestFunctionClamp()
         {
-            var math = engine.Evaluate("clamp(20.1.10)");
+            var options = ExpressionOptions.Default;
+            var math = engine.Evaluate("clamp(20"+options.ArgumentSeparator+"1"+options.ArgumentSeparator+"10)");
             double actual = 10;
             Assert.AreEqual(actual, math);
         }
+
     }
 }
