@@ -184,7 +184,6 @@ namespace Evaluator
         {
             SkipWhiteSpace();
             var remaining = GetRemainingText();
-            var argumentSeparator = this.options.ArgumentSeparator;
             var (tokenType, lenght, value, tokenText, function) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
@@ -199,7 +198,7 @@ namespace Evaluator
                 ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
                 ['+', ..] => new TokenInfo(TokenType.OperatorPlus, 1),
                 ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
-                [',',..] => new TokenInfo(TokenType.Comma, 1),
+                [var firstCharacter,..] when firstCharacter == this.options.ArgumentSeparator => new TokenInfo(TokenType.ArgumentSeparator, 1),
                 _ => new TokenInfo(TokenType.Unknown, 1)
             };
             this.Current = new Token(tokenType, value, tokenText, function);

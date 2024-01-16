@@ -161,8 +161,8 @@ namespace TestProject4
         public void TestFunctionClamp()
         {
             var options = ExpressionOptions.Default;
-            var math = engine.Evaluate("clamp(20"+options.ArgumentSeparator+"1"+options.ArgumentSeparator+"10)");
-            double actual = 10;
+            var math = engine.Evaluate("clamp(20"+options.ArgumentSeparator+"1"+options.ArgumentSeparator+"10) + 2"+options.DecimalPointCharacter+"1");
+            double actual = 12.1;
             Assert.AreEqual(actual, math);
         }
 

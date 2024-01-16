@@ -166,7 +166,7 @@ namespace Evaluator
             var argument = this.ParseExpression();
             if (argument is null) throw new ParseException("A function argument is expected.");
             arguments.Add(argument);
-            while (this.lexer.TryConsumeTokenType(TokenType.Comma))
+            while (this.lexer.TryConsumeTokenType(TokenType.ArgumentSeparator))
             {
                 argument = this.ParseExpression();
                 if (argument is null)

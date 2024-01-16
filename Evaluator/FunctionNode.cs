@@ -58,13 +58,13 @@ namespace Evaluator
             return Math.Tan(this.Argument.Evaluate(variables));
         }
     }
-    public sealed record ClampFunctionNode(AstNode value, AstNode minimum , AstNode maximum) : MultipleArgFunctionNode("clamp", value, minimum, maximum)
+    public sealed record ClampFunctionNode(AstNode Value, AstNode Minimum , AstNode Maximum) : MultipleArgFunctionNode("clamp", Value, Minimum, Maximum)
     {
         public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
         {
-            var value = Evaluate(variables);
-            var minimum = Evaluate(variables);
-            var maximum = Evaluate(variables);
+            var value = Value.Evaluate(variables);
+            var minimum = Minimum.Evaluate(variables);
+            var maximum = Maximum.Evaluate(variables);
             return Math.Clamp(value,minimum,maximum);
         }
     }

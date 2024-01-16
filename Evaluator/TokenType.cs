@@ -19,7 +19,7 @@ namespace Evaluator
         OperatorExponent,
         Identifier,
         Function,
-        Comma,
+        ArgumentSeparator,
     }
     
 }
