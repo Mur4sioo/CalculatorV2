@@ -16,7 +16,7 @@ namespace Evaluator
         {
             this.lexer = lexer;
         }
-
+        
         public static AstNode ParseExpression(string input, CultureInfo? culture = null)
         {
             var lexer = new Lexer(input, culture);

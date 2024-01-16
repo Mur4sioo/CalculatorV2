@@ -11,6 +11,10 @@ namespace Evaluator
         public static FunctionNode Create(string name, IReadOnlyList<AstNode> arguments) => (name, arguments) switch
         {
             ("sqrt", [var arg]) => new SqrtFunctionNode(arg),
+            ("abs", [var arg]) => new AbsFunctionNode(arg),
+            ("sin", [var arg]) => new SinFunctionNode(arg),
+            ("cos", [var arg]) => new CosFunctionNode(arg),
+            ("tan", [var arg]) => new TanFunctionNode(arg),
             ("clamp", [var value, var minimum, var maximum]) => new ClampFunctionNode(value, minimum, maximum),
             ("sqrt" or "clamp", _) => throw new InvalidOperationException("Incorrect number of arguments."),
             _ => throw new InvalidOperationException($"Unknown function name {name}"),
@@ -23,6 +27,35 @@ namespace Evaluator
         public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
         {
             return Math.Sqrt(this.Argument.Evaluate(variables));
+        }
+    }
+
+    public sealed record AbsFunctionNode(AstNode Argument) : OneArgFunctionNode("abs", Argument)
+    {
+        public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
+        {
+            return Math.Abs(this.Argument.Evaluate(variables));
+        }
+    }
+    public sealed record SinFunctionNode(AstNode Argument) : OneArgFunctionNode("sin", Argument)
+    {
+        public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
+        {
+            return Math.Sin(this.Argument.Evaluate(variables));
+        }
+    }
+    public sealed record CosFunctionNode(AstNode Argument) : OneArgFunctionNode("cos", Argument)
+    {
+        public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
+        {
+            return Math.Cos(this.Argument.Evaluate(variables));
+        }
+    }
+    public sealed record TanFunctionNode(AstNode Argument) : OneArgFunctionNode("tan", Argument)
+    {
+        public override double Evaluate(IReadOnlyDictionary<string, double>? variables)
+        {
+            return Math.Tan(this.Argument.Evaluate(variables));
         }
     }
     public sealed record ClampFunctionNode(AstNode value, AstNode minimum , AstNode maximum) : MultipleArgFunctionNode("clamp", value, minimum, maximum)

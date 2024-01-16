@@ -144,14 +144,21 @@ namespace TestProject4
         [TestMethod]
         public void TestFunctionSqrt()
         {
-            var math = engine.Evaluate("sqrt(4)");
-            double actual = 2;
+            var math = engine.Evaluate("sqrt(4)-1");
+            double actual = 1;
+            Assert.AreEqual(actual, math);
+        }
+        [TestMethod]
+        public void TestEquasion()
+        {
+            var math = engine.Evaluate("2**2");
+            double actual = 4;
             Assert.AreEqual(actual, math);
         }
         [TestMethod]
         public void TestFunctionClamp()
         {
-            var math = engine.Evaluate("clamp(20,1,10)");
+            var math = engine.Evaluate("clamp(20.1.10)");
             double actual = 10;
             Assert.AreEqual(actual, math);
         }

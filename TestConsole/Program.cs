@@ -7,10 +7,6 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            foreach (var x in FunctionList.Functions)
-            {
-                Console.WriteLine(x);
-            }
         }
     }
 }

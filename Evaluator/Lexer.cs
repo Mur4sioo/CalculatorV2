@@ -160,12 +160,12 @@ namespace Evaluator
                     => GeIdentifierInfo(remaining,this.culture),
                 ['(', ..] => new TokenInfo(TokenType.ParenOpen, 1),
                 [')', ..] => new TokenInfo(TokenType.ParenClose, 1),
-                ['*', '*', ..] => new TokenInfo(TokenType.OperatorExponent, 2),
+                ['*', '*', ..] or ['^',..] => new TokenInfo(TokenType.OperatorExponent, 2),
                 ['/', ..] => new TokenInfo(TokenType.OperatorDivide, 1),
                 ['*', ..] => new TokenInfo(TokenType.OperatorMultiply, 1),
                 ['+', ..] => new TokenInfo(TokenType.OperatorPlus, 1),
                 ['-', ..] => new TokenInfo(TokenType.OperatorMinus, 1),
-                [',',..] => new TokenInfo(TokenType.Comma, 1),
+                ['.',..] => new TokenInfo(TokenType.Comma, 1),
                 _ => new TokenInfo(TokenType.Unknown, 1)
             };
             this.Current = new Token(tokenType, value, tokenText, function);
