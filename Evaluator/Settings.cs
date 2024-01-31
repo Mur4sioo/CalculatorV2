@@ -13,7 +13,10 @@ namespace Evaluator
         public static void ChangeDecimalPoint(ReadOnlySpan<char> input, Span<char> output, char convertFrom, char convertTo)
         {
             if (convertFrom == convertTo || !input.Contains(convertFrom))
+            {
+                input.CopyTo(output);
                 return;
+            }
             input.CopyTo(output);
             for (var i = 0; i < output.Length; i++)
             {
@@ -43,8 +46,8 @@ namespace Evaluator
         }
 
         public static ExpressionOptions Default { get; } = new(
-            decimalPointCharacter: '.',
-            argumentSeparator: ','
+            decimalPointCharacter: ',',
+            argumentSeparator: '.'
         );
         public char ArgumentSeparator { get;  }
         public char DecimalPointCharacter { get; }

@@ -55,18 +55,18 @@ namespace Evaluator
 
         private static TokenInfo GetNumberTokenInfo(ReadOnlySpan<char> text, ExpressionOptions options)
         {
-            var lenght = CountNumberOrDecimal(text, options.DecimalPointCharacter);
+            var lenght = CountNumberOrDecimal(text, options);
             var numberPart = text.Slice(0, lenght);
-            return new TokenInfo(ParseDouble(numberPart, options.DecimalPointCharacter), lenght);
+            return new TokenInfo(ParseDouble(numberPart, options), lenght);
         }
 
-        private static double ParseDouble(ReadOnlySpan<char> text, char decimalPointCharacter)
+        private static double ParseDouble(ReadOnlySpan<char> text, ExpressionOptions options)
         {
-            var options = ExpressionOptions.Default;
-            var dec = decimalPointCharacter;
-            var arg = options.ArgumentSeparator;
-            var result = double.Parse(ExpressionOptions.ChangeDecimalPoint(text.ToString(), arg, dec));
-            return result;
+            if (text.Length > 32)
+                throw new InvalidOperationException("Expected a double to be less than 32 characters");
+            Span<char> converted = stackalloc char[text.Length];
+            ExpressionOptions.ChangeDecimalPoint(text, converted, convertFrom: options.DecimalPointCharacter, convertTo: '.');
+            return double.Parse(converted, CultureInfo.InvariantCulture);
         }
         private static int CountCharInFunction(ReadOnlySpan<char> text, string? separator = null)
         {
@@ -113,17 +113,17 @@ namespace Evaluator
         public bool IsFinished { get; private set; }
         public ReadOnlySpan<char> GetRemainingText() => this.text.AsSpan().Slice(index);
 
-        private static bool IsNumberOrDecimal(ReadOnlySpan<char> text, char separator)
+        private static bool IsNumberOrDecimal(ReadOnlySpan<char> text, ExpressionOptions options)
         {
-            return text[0] == separator || char.IsAsciiDigit(text[0]);
+            return text[0] == options.DecimalPointCharacter || char.IsAsciiDigit(text[0]);
         }
 
-        private static int CountNumberOrDecimal(ReadOnlySpan<char> text , char separator)
+        private static int CountNumberOrDecimal(ReadOnlySpan<char> text , ExpressionOptions options)
         {
             var lenght = 0;
             while (text.IsEmpty is false)
             {
-                if (text[0] == separator)
+                if (text[0] == options.DecimalPointCharacter)
                 {
                     lenght += 1;
                     text = text.Slice(1);
@@ -165,7 +165,7 @@ namespace Evaluator
             var (tokenType, lenght, value, tokenText, function) = remaining switch
             {
                 [] => new TokenInfo(TokenType.Unknown, 0),
-                _ when IsNumberOrDecimal(remaining, this.options.DecimalPointCharacter)
+                _ when IsNumberOrDecimal(remaining, this.options)
                     => GetNumberTokenInfo(remaining, this.options),
                 _ when char.IsAsciiLetter(remaining[0])
                     => GeIdentifierInfo(remaining,this.options),

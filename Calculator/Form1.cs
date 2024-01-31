@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.JavaScript;
+using System.Security.Cryptography.X509Certificates;
 using Calculator;
 using Evaluator;
 
@@ -8,6 +9,8 @@ namespace Calculator
     {
         Evaluator.CalculatorEngine engine = new CalculatorEngine();
         KeyboardInput keyboardinput = new KeyboardInput();
+        char DecimalPointCharacter = ',';
+        char ArgumentSeparator = '.';
         bool accept_digit = true;
         bool accept_operator = false;
         bool accept_decimal = true;
@@ -62,7 +65,8 @@ namespace Calculator
         {
             //try
             //{
-            math.Text += '=' + (engine.Evaluate(math.Text)).ToString();
+            ExpressionOptions options = new ExpressionOptions(this.DecimalPointCharacter, this.ArgumentSeparator);
+            math.Text += '=' + (engine.Evaluate(math.Text, options)).ToString();
             //}
             //catch (Exception ex)
             //{
@@ -75,14 +79,30 @@ namespace Calculator
             math.Text += ((Button)sender).Text;
         }
 
-        private void DotDec_CheckedChanged(object sender, EventArgs e)
+        private void DotDec_CheckedChanged_1(object sender, EventArgs e)
         {
-            ExpressionOptions options = new ExpressionOptions('.', ',');
+            this.DecimalPointCharacter = '.';
+            this.ArgumentSeparator = ',';
         }
 
-        private void CommaDec_CheckedChanged(object sender, EventArgs e)
+        private void CommaDec_CheckedChanged_1(object sender, EventArgs e)
         {
-            ExpressionOptions options = new ExpressionOptions(',', '.');
+            this.DecimalPointCharacter = ',';
+            this.ArgumentSeparator = '.';
+        }
+
+        private void Info_button_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Function list:\n" +
+                "square root = sqrt(...)\n" +
+                "absolute value = abs(...)\n" +
+                "sin = sin(...)\n" +
+                "cos = cos(...)\n" +
+                "tan = tan(...)\n" +
+                "clamp = clamp(...)\n" +
+                "Just fill ... with an expression."
+                );
         }
     }
 }
