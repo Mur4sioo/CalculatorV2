@@ -49,13 +49,19 @@
             button13 = new Button();
             button1 = new Button();
             button14 = new Button();
+            DotDec = new CheckBox();
+            CommaDec = new CheckBox();
+            DotDecText = new Label();
+            CommaDecimalText = new Label();
+            SettingsText = new Label();
             SuspendLayout();
             // 
             // NumClick
             // 
-            NumClick.Location = new Point(27, 332);
+            NumClick.Location = new Point(19, 199);
+            NumClick.Margin = new Padding(2);
             NumClick.Name = "NumClick";
-            NumClick.Size = new Size(80, 80);
+            NumClick.Size = new Size(56, 48);
             NumClick.TabIndex = 0;
             NumClick.Text = "1";
             NumClick.UseVisualStyleBackColor = true;
@@ -64,18 +70,20 @@
             // math
             // 
             math.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            math.Location = new Point(27, 26);
+            math.Location = new Point(19, 16);
+            math.Margin = new Padding(2);
             math.Multiline = true;
             math.Name = "math";
-            math.Size = new Size(424, 128);
+            math.Size = new Size(298, 78);
             math.TabIndex = 1;
             math.Text = "0";
             // 
             // BackClick
             // 
-            BackClick.Location = new Point(371, 160);
+            BackClick.Location = new Point(260, 96);
+            BackClick.Margin = new Padding(2);
             BackClick.Name = "BackClick";
-            BackClick.Size = new Size(80, 80);
+            BackClick.Size = new Size(56, 48);
             BackClick.TabIndex = 2;
             BackClick.Text = "<-";
             BackClick.UseVisualStyleBackColor = true;
@@ -83,9 +91,10 @@
             // 
             // Equals
             // 
-            Equals.Location = new Point(199, 418);
+            Equals.Location = new Point(139, 251);
+            Equals.Margin = new Padding(2);
             Equals.Name = "Equals";
-            Equals.Size = new Size(80, 80);
+            Equals.Size = new Size(56, 48);
             Equals.TabIndex = 3;
             Equals.Text = "=";
             Equals.UseVisualStyleBackColor = true;
@@ -93,9 +102,10 @@
             // 
             // ClearClick
             // 
-            ClearClick.Location = new Point(371, 246);
+            ClearClick.Location = new Point(260, 148);
+            ClearClick.Margin = new Padding(2);
             ClearClick.Name = "ClearClick";
-            ClearClick.Size = new Size(80, 80);
+            ClearClick.Size = new Size(56, 48);
             ClearClick.TabIndex = 4;
             ClearClick.Text = "C";
             ClearClick.UseVisualStyleBackColor = true;
@@ -103,9 +113,10 @@
             // 
             // OperatorClick
             // 
-            OperatorClick.Location = new Point(285, 418);
+            OperatorClick.Location = new Point(200, 251);
+            OperatorClick.Margin = new Padding(2);
             OperatorClick.Name = "OperatorClick";
-            OperatorClick.Size = new Size(80, 80);
+            OperatorClick.Size = new Size(56, 48);
             OperatorClick.TabIndex = 5;
             OperatorClick.Text = "/";
             OperatorClick.UseVisualStyleBackColor = true;
@@ -113,9 +124,10 @@
             // 
             // decimal_point
             // 
-            decimal_point.Location = new Point(27, 418);
+            decimal_point.Location = new Point(19, 251);
+            decimal_point.Margin = new Padding(2);
             decimal_point.Name = "decimal_point";
-            decimal_point.Size = new Size(80, 80);
+            decimal_point.Size = new Size(56, 48);
             decimal_point.TabIndex = 6;
             decimal_point.Text = ",";
             decimal_point.UseVisualStyleBackColor = true;
@@ -123,9 +135,10 @@
             // 
             // button2
             // 
-            button2.Location = new Point(113, 418);
+            button2.Location = new Point(79, 251);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(80, 80);
+            button2.Size = new Size(56, 48);
             button2.TabIndex = 7;
             button2.Text = "0";
             button2.UseVisualStyleBackColor = true;
@@ -133,9 +146,10 @@
             // 
             // button3
             // 
-            button3.Location = new Point(113, 332);
+            button3.Location = new Point(79, 199);
+            button3.Margin = new Padding(2);
             button3.Name = "button3";
-            button3.Size = new Size(80, 80);
+            button3.Size = new Size(56, 48);
             button3.TabIndex = 8;
             button3.Text = "2";
             button3.UseVisualStyleBackColor = true;
@@ -143,9 +157,10 @@
             // 
             // button4
             // 
-            button4.Location = new Point(27, 246);
+            button4.Location = new Point(19, 148);
+            button4.Margin = new Padding(2);
             button4.Name = "button4";
-            button4.Size = new Size(80, 80);
+            button4.Size = new Size(56, 48);
             button4.TabIndex = 9;
             button4.Text = "4";
             button4.UseVisualStyleBackColor = true;
@@ -153,9 +168,10 @@
             // 
             // button5
             // 
-            button5.Location = new Point(113, 246);
+            button5.Location = new Point(79, 148);
+            button5.Margin = new Padding(2);
             button5.Name = "button5";
-            button5.Size = new Size(80, 80);
+            button5.Size = new Size(56, 48);
             button5.TabIndex = 10;
             button5.Text = "5";
             button5.UseVisualStyleBackColor = true;
@@ -163,9 +179,10 @@
             // 
             // button6
             // 
-            button6.Location = new Point(199, 246);
+            button6.Location = new Point(139, 148);
+            button6.Margin = new Padding(2);
             button6.Name = "button6";
-            button6.Size = new Size(80, 80);
+            button6.Size = new Size(56, 48);
             button6.TabIndex = 11;
             button6.Text = "6";
             button6.UseVisualStyleBackColor = true;
@@ -173,9 +190,10 @@
             // 
             // button7
             // 
-            button7.Location = new Point(199, 160);
+            button7.Location = new Point(139, 96);
+            button7.Margin = new Padding(2);
             button7.Name = "button7";
-            button7.Size = new Size(80, 80);
+            button7.Size = new Size(56, 48);
             button7.TabIndex = 12;
             button7.Text = "9";
             button7.UseVisualStyleBackColor = true;
@@ -183,9 +201,10 @@
             // 
             // button8
             // 
-            button8.Location = new Point(113, 160);
+            button8.Location = new Point(79, 96);
+            button8.Margin = new Padding(2);
             button8.Name = "button8";
-            button8.Size = new Size(80, 80);
+            button8.Size = new Size(56, 48);
             button8.TabIndex = 13;
             button8.Text = "8";
             button8.UseVisualStyleBackColor = true;
@@ -193,9 +212,10 @@
             // 
             // button9
             // 
-            button9.Location = new Point(27, 160);
+            button9.Location = new Point(19, 96);
+            button9.Margin = new Padding(2);
             button9.Name = "button9";
-            button9.Size = new Size(80, 80);
+            button9.Size = new Size(56, 48);
             button9.TabIndex = 14;
             button9.Text = "7";
             button9.UseVisualStyleBackColor = true;
@@ -203,9 +223,10 @@
             // 
             // button10
             // 
-            button10.Location = new Point(199, 332);
+            button10.Location = new Point(139, 199);
+            button10.Margin = new Padding(2);
             button10.Name = "button10";
-            button10.Size = new Size(80, 80);
+            button10.Size = new Size(56, 48);
             button10.TabIndex = 15;
             button10.Text = "3";
             button10.UseVisualStyleBackColor = true;
@@ -213,9 +234,10 @@
             // 
             // button11
             // 
-            button11.Location = new Point(285, 332);
+            button11.Location = new Point(200, 199);
+            button11.Margin = new Padding(2);
             button11.Name = "button11";
-            button11.Size = new Size(80, 80);
+            button11.Size = new Size(56, 48);
             button11.TabIndex = 16;
             button11.Text = "*";
             button11.UseVisualStyleBackColor = true;
@@ -223,9 +245,10 @@
             // 
             // button12
             // 
-            button12.Location = new Point(285, 246);
+            button12.Location = new Point(200, 148);
+            button12.Margin = new Padding(2);
             button12.Name = "button12";
-            button12.Size = new Size(80, 80);
+            button12.Size = new Size(56, 48);
             button12.TabIndex = 17;
             button12.Text = "-";
             button12.UseVisualStyleBackColor = true;
@@ -233,9 +256,10 @@
             // 
             // button13
             // 
-            button13.Location = new Point(285, 160);
+            button13.Location = new Point(200, 96);
+            button13.Margin = new Padding(2);
             button13.Name = "button13";
-            button13.Size = new Size(80, 80);
+            button13.Size = new Size(56, 48);
             button13.TabIndex = 18;
             button13.Text = "+";
             button13.UseVisualStyleBackColor = true;
@@ -243,9 +267,10 @@
             // 
             // button1
             // 
-            button1.Location = new Point(371, 332);
+            button1.Location = new Point(260, 199);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(80, 80);
+            button1.Size = new Size(56, 48);
             button1.TabIndex = 19;
             button1.Text = "(";
             button1.UseVisualStyleBackColor = true;
@@ -253,19 +278,72 @@
             // 
             // button14
             // 
-            button14.Location = new Point(371, 418);
+            button14.Location = new Point(260, 251);
+            button14.Margin = new Padding(2);
             button14.Name = "button14";
-            button14.Size = new Size(80, 80);
+            button14.Size = new Size(56, 48);
             button14.TabIndex = 20;
             button14.Text = ")";
             button14.UseVisualStyleBackColor = true;
             button14.Click += NumClick_Click;
             // 
+            // DotDec
+            // 
+            DotDec.AutoSize = true;
+            DotDec.Location = new Point(392, 251);
+            DotDec.Name = "DotDec";
+            DotDec.Size = new Size(15, 14);
+            DotDec.TabIndex = 21;
+            DotDec.UseVisualStyleBackColor = true;
+            DotDec.CheckedChanged += DotDec_CheckedChanged;
+            // 
+            // CommaDec
+            // 
+            CommaDec.AutoSize = true;
+            CommaDec.Location = new Point(392, 148);
+            CommaDec.Name = "CommaDec";
+            CommaDec.Size = new Size(15, 14);
+            CommaDec.TabIndex = 22;
+            CommaDec.UseVisualStyleBackColor = true;
+            CommaDec.CheckedChanged += CommaDec_CheckedChanged;
+            // 
+            // DotDecText
+            // 
+            DotDecText.Location = new Point(321, 199);
+            DotDecText.Name = "DotDecText";
+            DotDecText.Size = new Size(139, 48);
+            DotDecText.TabIndex = 23;
+            DotDecText.Text = "DecimalPoint = \".\" ArgumentSeparator = \",\"";
+            // 
+            // CommaDecimalText
+            // 
+            CommaDecimalText.Location = new Point(321, 96);
+            CommaDecimalText.Name = "CommaDecimalText";
+            CommaDecimalText.Size = new Size(139, 48);
+            CommaDecimalText.TabIndex = 24;
+            CommaDecimalText.Text = "DecimalPoint = \",\" ArgumentSeparator = \".\"";
+            // 
+            // SettingsText
+            // 
+            SettingsText.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            SettingsText.Location = new Point(321, 16);
+            SettingsText.Name = "SettingsText";
+            SettingsText.Size = new Size(147, 46);
+            SettingsText.TabIndex = 25;
+            SettingsText.Text = "Settings";
+            SettingsText.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // Calculator
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(474, 546);
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            ClientSize = new Size(472, 328);
+            Controls.Add(SettingsText);
+            Controls.Add(CommaDecimalText);
+            Controls.Add(DotDecText);
+            Controls.Add(CommaDec);
+            Controls.Add(DotDec);
             Controls.Add(button14);
             Controls.Add(button1);
             Controls.Add(button13);
@@ -287,6 +365,7 @@
             Controls.Add(BackClick);
             Controls.Add(math);
             Controls.Add(NumClick);
+            Margin = new Padding(2);
             Name = "Calculator";
             Text = "Calculator";
             ResumeLayout(false);
@@ -316,5 +395,10 @@
         private Button button13;
         private Button button1;
         private Button button14;
+        private CheckBox DotDec;
+        private CheckBox CommaDec;
+        private Label DotDecText;
+        private Label CommaDecimalText;
+        private Label SettingsText;
     }
 }

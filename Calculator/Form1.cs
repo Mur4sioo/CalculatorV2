@@ -11,6 +11,7 @@ namespace Calculator
         bool accept_digit = true;
         bool accept_operator = false;
         bool accept_decimal = true;
+
         public Calculator()
         {
             InitializeComponent();
@@ -61,7 +62,7 @@ namespace Calculator
         {
             //try
             //{
-                math.Text += '=' + (engine.Evaluate(math.Text)).ToString();
+            math.Text += '=' + (engine.Evaluate(math.Text)).ToString();
             //}
             //catch (Exception ex)
             //{
@@ -72,6 +73,16 @@ namespace Calculator
         private void decimal_point_Click(object sender, EventArgs e)
         {
             math.Text += ((Button)sender).Text;
+        }
+
+        private void DotDec_CheckedChanged(object sender, EventArgs e)
+        {
+            ExpressionOptions options = new ExpressionOptions('.', ',');
+        }
+
+        private void CommaDec_CheckedChanged(object sender, EventArgs e)
+        {
+            ExpressionOptions options = new ExpressionOptions(',', '.');
         }
     }
 }

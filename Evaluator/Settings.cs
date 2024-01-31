@@ -10,6 +10,31 @@ namespace Evaluator
 {
     public sealed class ExpressionOptions
     {
+        public static void ChangeDecimalPoint(ReadOnlySpan<char> input, Span<char> output, char convertFrom, char convertTo)
+        {
+            if (convertFrom == convertTo || !input.Contains(convertFrom))
+                return;
+            input.CopyTo(output);
+            for (var i = 0; i < output.Length; i++)
+            {
+                if (output[i] == convertFrom)
+                    output[i] = convertTo;
+            }
+        }
+
+        public static string ChangeDecimalPoint(string input, char convertFrom, char convertTo)
+        {
+            return String.Create(
+                input.Length,
+                (input, convertFrom, convertTo),
+                static (outputSpan, args) => ChangeDecimalPoint(
+                    args.input,
+                    outputSpan,
+                    args.convertFrom,
+                    args.convertTo
+                )
+            );
+        }
         public ExpressionOptions(char decimalPointCharacter, char argumentSeparator)
         {
             this.ArgumentSeparator = argumentSeparator;

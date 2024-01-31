@@ -62,33 +62,11 @@ namespace Evaluator
 
         private static double ParseDouble(ReadOnlySpan<char> text, char decimalPointCharacter)
         {
-            if (decimalPointCharacter != '.' && text.Contains('.'))
-            {
-                throw new FormatException(
-                    $"{text} mixes the use of invariant decimal '.' and user-specified decimal {decimalPointCharacter}");
-            }
-
-            char[]? charArray = null;
-            try
-            {
-                charArray = ArrayPool<char>.Shared.Rent(text.Length);
-                var charSpan = charArray.AsSpan();
-                charSpan = charSpan.Slice(0, text.Length);
-                for (var i = 0; i < text.Length; i++)
-                {
-                    var toCopy = text[i];
-                    if (toCopy == decimalPointCharacter)
-                        toCopy = '.';
-                    charSpan[i] = toCopy;
-                }
-
-                return double.Parse(charSpan, CultureInfo.InvariantCulture);
-            }
-            finally
-            {
-                if (charArray is not null)
-                    ArrayPool<char>.Shared.Return(charArray);
-            }
+            var options = ExpressionOptions.Default;
+            var dec = decimalPointCharacter;
+            var arg = options.ArgumentSeparator;
+            var result = double.Parse(ExpressionOptions.ChangeDecimalPoint(text.ToString(), arg, dec));
+            return result;
         }
         private static int CountCharInFunction(ReadOnlySpan<char> text, string? separator = null)
         {
