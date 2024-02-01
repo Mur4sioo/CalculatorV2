@@ -49,12 +49,7 @@
             button13 = new Button();
             button1 = new Button();
             button14 = new Button();
-            DotDecText = new Label();
-            CommaDecimalText = new Label();
-            SettingsText = new Label();
-            CommaDec = new RadioButton();
-            DotDec = new RadioButton();
-            Info_button = new Button();
+            Settings_Button = new Button();
             SuspendLayout();
             // 
             // NumClick
@@ -77,7 +72,6 @@
             math.Name = "math";
             math.Size = new Size(298, 78);
             math.TabIndex = 1;
-            math.Text = "0";
             // 
             // BackClick
             // 
@@ -288,63 +282,15 @@
             button14.UseVisualStyleBackColor = true;
             button14.Click += NumClick_Click;
             // 
-            // DotDecText
+            // Settings_Button
             // 
-            DotDecText.Location = new Point(321, 148);
-            DotDecText.Name = "DotDecText";
-            DotDecText.Size = new Size(139, 48);
-            DotDecText.TabIndex = 23;
-            DotDecText.Text = "DecimalPoint = \".\" ArgumentSeparator = \",\"";
-            // 
-            // CommaDecimalText
-            // 
-            CommaDecimalText.Location = new Point(321, 45);
-            CommaDecimalText.Name = "CommaDecimalText";
-            CommaDecimalText.Size = new Size(139, 48);
-            CommaDecimalText.TabIndex = 24;
-            CommaDecimalText.Text = "DecimalPoint = \",\" ArgumentSeparator = \".\"";
-            // 
-            // SettingsText
-            // 
-            SettingsText.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            SettingsText.Location = new Point(321, -1);
-            SettingsText.Name = "SettingsText";
-            SettingsText.Size = new Size(147, 46);
-            SettingsText.TabIndex = 25;
-            SettingsText.Text = "Settings";
-            SettingsText.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // CommaDec
-            // 
-            CommaDec.AutoSize = true;
-            CommaDec.Checked = true;
-            CommaDec.Location = new Point(385, 97);
-            CommaDec.Name = "CommaDec";
-            CommaDec.Size = new Size(14, 13);
-            CommaDec.TabIndex = 26;
-            CommaDec.TabStop = true;
-            CommaDec.UseVisualStyleBackColor = true;
-            CommaDec.CheckedChanged += CommaDec_CheckedChanged_1;
-            // 
-            // DotDec
-            // 
-            DotDec.AutoSize = true;
-            DotDec.Location = new Point(385, 200);
-            DotDec.Name = "DotDec";
-            DotDec.Size = new Size(14, 13);
-            DotDec.TabIndex = 27;
-            DotDec.UseVisualStyleBackColor = true;
-            DotDec.CheckedChanged += DotDec_CheckedChanged_1;
-            // 
-            // Info_button
-            // 
-            Info_button.Location = new Point(324, 251);
-            Info_button.Name = "Info_button";
-            Info_button.Size = new Size(136, 48);
-            Info_button.TabIndex = 28;
-            Info_button.Text = "Help";
-            Info_button.UseVisualStyleBackColor = true;
-            Info_button.Click += Info_button_Click;
+            Settings_Button.Location = new Point(80, 304);
+            Settings_Button.Name = "Settings_Button";
+            Settings_Button.Size = new Size(176, 48);
+            Settings_Button.TabIndex = 29;
+            Settings_Button.Text = "Settings";
+            Settings_Button.UseVisualStyleBackColor = true;
+            Settings_Button.Click += Settings_Button_Click;
             // 
             // Calculator
             // 
@@ -352,13 +298,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.White;
-            ClientSize = new Size(472, 328);
-            Controls.Add(Info_button);
-            Controls.Add(DotDec);
-            Controls.Add(CommaDec);
-            Controls.Add(SettingsText);
-            Controls.Add(CommaDecimalText);
-            Controls.Add(DotDecText);
+            ClientSize = new Size(337, 366);
+            Controls.Add(Settings_Button);
             Controls.Add(button14);
             Controls.Add(button1);
             Controls.Add(button13);
@@ -410,11 +351,6 @@
         private Button button13;
         private Button button1;
         private Button button14;
-        private Label DotDecText;
-        private Label CommaDecimalText;
-        private Label SettingsText;
-        private RadioButton CommaDec;
-        private RadioButton DotDec;
-        private Button Info_button;
+        private Button Settings_Button;
     }
 }

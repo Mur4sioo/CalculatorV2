@@ -9,31 +9,19 @@ namespace Calculator
     {
         Evaluator.CalculatorEngine engine = new CalculatorEngine();
         KeyboardInput keyboardinput = new KeyboardInput();
-        char DecimalPointCharacter = ',';
-        char ArgumentSeparator = '.';
         bool accept_digit = true;
         bool accept_operator = false;
         bool accept_decimal = true;
-
+        private ExpressionOptions options { get; set; } = ExpressionOptions.Default;
         public Calculator()
         {
+
             InitializeComponent();
         }
 
         private void NumClick_Click(object sender, EventArgs e)
         {
-            if (math.Text == "0")
-            {
-                math.Text = ((Button)sender).Text;
-                accept_digit = true;
-                accept_operator = true;
-            }
-            else
-            {
-                math.Text += ((Button)sender).Text;
-                accept_digit = true;
-                accept_operator = true;
-            }
+            math.Text += ((Button)sender).Text;
         }
 
         private void OperatorClick_Click(object sender, EventArgs e)
@@ -44,9 +32,8 @@ namespace Calculator
         private void BackClick_Click(object sender, EventArgs e)
         {
             var text = math.Text.Trim();
-            if (text.Length == 1)
+            if (text.Length == 0)
             {
-                math.Text = "0";
                 return;
             }
             text = text[..^1];
@@ -55,18 +42,15 @@ namespace Calculator
 
         private void ClearClick_Click(object sender, EventArgs e)
         {
-            math.Text = "0";
-            accept_digit = true;
-            accept_operator = false;
-            accept_decimal = true;
+            math.Text = "";
         }
 
         private void Equals_Click(object sender, EventArgs e)
         {
             //try
             //{
-            ExpressionOptions options = new ExpressionOptions(this.DecimalPointCharacter, this.ArgumentSeparator);
-            math.Text += '=' + (engine.Evaluate(math.Text, options)).ToString();
+            
+            math.Text += '=' + (engine.Evaluate(math.Text, options).ToString());
             //}
             //catch (Exception ex)
             //{
@@ -79,30 +63,13 @@ namespace Calculator
             math.Text += ((Button)sender).Text;
         }
 
-        private void DotDec_CheckedChanged_1(object sender, EventArgs e)
+        private void Settings_Button_Click(object sender, EventArgs e)
         {
-            this.DecimalPointCharacter = '.';
-            this.ArgumentSeparator = ',';
-        }
-
-        private void CommaDec_CheckedChanged_1(object sender, EventArgs e)
-        {
-            this.DecimalPointCharacter = ',';
-            this.ArgumentSeparator = '.';
-        }
-
-        private void Info_button_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                "Function list:\n" +
-                "square root = sqrt(...)\n" +
-                "absolute value = abs(...)\n" +
-                "sin = sin(...)\n" +
-                "cos = cos(...)\n" +
-                "tan = tan(...)\n" +
-                "clamp = clamp(...)\n" +
-                "Just fill ... with an expression."
-                );
+            using var settingsForm = new SettingsForm(this.options);
+            if (settingsForm.ShowDialog() == DialogResult.OK)
+            {
+                this.options = settingsForm.Options;
+            }
         }
     }
 }
