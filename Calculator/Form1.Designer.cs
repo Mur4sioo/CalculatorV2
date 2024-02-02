@@ -70,6 +70,7 @@
             math.Margin = new Padding(2);
             math.Multiline = true;
             math.Name = "math";
+            math.ScrollBars = ScrollBars.Both;
             math.Size = new Size(298, 78);
             math.TabIndex = 1;
             // 

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Cryptography.X509Certificates;
 using Calculator;
@@ -47,15 +48,22 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            
-            math.Text += '=' + (engine.Evaluate(math.Text, options).ToString());
-            //}
-            //catch (Exception ex)
-            //{
-            //    math.Text = $"Error : {ex}";
-            //}
+            try
+            {
+
+            var doubleResult = engine.Evaluate(math.Text, options);
+            var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
+            var convertedTextResult = ExpressionOptions.ChangeDecimalPoint(
+                textResult,
+                convertFrom: '.',
+                convertTo: options.DecimalPointCharacter
+            );
+            math.Text = $"{math.Text} = {convertedTextResult}";
+            }
+            catch (Exception ex)
+            {
+               MessageBox.Show($"Invalid input.");
+            }
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
