@@ -93,6 +93,7 @@
             Info_button.TabIndex = 33;
             Info_button.Text = "Info";
             Info_button.UseVisualStyleBackColor = true;
+            Info_button.Click += Info_button_Click;
             // 
             // okButton
             // 

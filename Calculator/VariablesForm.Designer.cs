@@ -35,6 +35,8 @@
             VariableValueTextBox = new TextBox();
             OkButton = new Button();
             CancelButton = new Button();
+            VariableNameLabel = new Label();
+            VariableValueLabel = new Label();
             SuspendLayout();
             // 
             // variablesList
@@ -48,7 +50,7 @@
             // 
             // AddVariiable
             // 
-            AddVariiable.Location = new Point(12, 185);
+            AddVariiable.Location = new Point(12, 203);
             AddVariiable.Name = "AddVariiable";
             AddVariiable.Size = new Size(89, 52);
             AddVariiable.TabIndex = 1;
@@ -58,7 +60,7 @@
             // 
             // ClearVariables
             // 
-            ClearVariables.Location = new Point(107, 185);
+            ClearVariables.Location = new Point(107, 203);
             ClearVariables.Name = "ClearVariables";
             ClearVariables.Size = new Size(92, 52);
             ClearVariables.TabIndex = 2;
@@ -68,7 +70,7 @@
             // 
             // VariableNameTextBox
             // 
-            VariableNameTextBox.Location = new Point(12, 156);
+            VariableNameTextBox.Location = new Point(12, 174);
             VariableNameTextBox.Name = "VariableNameTextBox";
             VariableNameTextBox.Size = new Size(89, 23);
             VariableNameTextBox.TabIndex = 3;
@@ -76,7 +78,7 @@
             // 
             // VariableValueTextBox
             // 
-            VariableValueTextBox.Location = new Point(107, 156);
+            VariableValueTextBox.Location = new Point(107, 174);
             VariableValueTextBox.Name = "VariableValueTextBox";
             VariableValueTextBox.Size = new Size(92, 23);
             VariableValueTextBox.TabIndex = 4;
@@ -85,7 +87,7 @@
             // OkButton
             // 
             OkButton.DialogResult = DialogResult.OK;
-            OkButton.Location = new Point(12, 243);
+            OkButton.Location = new Point(12, 261);
             OkButton.Name = "OkButton";
             OkButton.Size = new Size(89, 48);
             OkButton.TabIndex = 5;
@@ -95,12 +97,30 @@
             // CancelButton
             // 
             CancelButton.DialogResult = DialogResult.Cancel;
-            CancelButton.Location = new Point(107, 243);
+            CancelButton.Location = new Point(107, 261);
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new Size(92, 48);
             CancelButton.TabIndex = 6;
             CancelButton.Text = "Cancel";
             CancelButton.UseVisualStyleBackColor = true;
+            // 
+            // VariableNameLabel
+            // 
+            VariableNameLabel.AutoSize = true;
+            VariableNameLabel.Location = new Point(12, 156);
+            VariableNameLabel.Name = "VariableNameLabel";
+            VariableNameLabel.Size = new Size(84, 15);
+            VariableNameLabel.TabIndex = 7;
+            VariableNameLabel.Text = "Variable name:";
+            // 
+            // VariableValueLabel
+            // 
+            VariableValueLabel.AutoSize = true;
+            VariableValueLabel.Location = new Point(107, 156);
+            VariableValueLabel.Name = "VariableValueLabel";
+            VariableValueLabel.Size = new Size(82, 15);
+            VariableValueLabel.TabIndex = 8;
+            VariableValueLabel.Text = "Variable value:";
             // 
             // VariablesForm
             // 
@@ -108,6 +128,8 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(217, 318);
+            Controls.Add(VariableValueLabel);
+            Controls.Add(VariableNameLabel);
             Controls.Add(CancelButton);
             Controls.Add(OkButton);
             Controls.Add(VariableValueTextBox);
@@ -130,5 +152,7 @@
         private TextBox VariableValueTextBox;
         private Button OkButton;
         private Button CancelButton;
+        private Label VariableNameLabel;
+        private Label VariableValueLabel;
     }
 }

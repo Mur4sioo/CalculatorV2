@@ -308,9 +308,10 @@
             // ResultHistory
             // 
             ResultHistory.AutoSize = true;
-            ResultHistory.Location = new Point(19, 47);
+            ResultHistory.Font = new Font("Segoe UI", 19F, FontStyle.Regular, GraphicsUnit.Point);
+            ResultHistory.Location = new Point(19, 26);
             ResultHistory.Name = "ResultHistory";
-            ResultHistory.Size = new Size(0, 15);
+            ResultHistory.Size = new Size(0, 36);
             ResultHistory.TabIndex = 31;
             // 
             // Calculator

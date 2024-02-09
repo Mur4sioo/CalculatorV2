@@ -40,5 +40,17 @@ namespace Calculator
             decimalPointCharacter = '.';
             argumentSeparator = ',';
         }
+
+        private void Info_button_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Additional Fuctions:\n" +
+                            "2**3 => 2 to the power of 3\n" +
+                            "sqrt(2) => square of 2\n" +
+                            "abs(2) => absolute value of 2\n" +
+                            "sin(3) => sine of 3\n" +
+                            "cos(3) => cosine of 3\n" +
+                            "tan(3) => tangens of 3\n" +
+                            "clamp(4,2,5) => clamp function");
+        }
     }
 }

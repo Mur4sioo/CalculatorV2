@@ -60,7 +60,7 @@ namespace Calculator
                     convertFrom: '.',
                     convertTo: options.DecimalPointCharacter
                 );
-                ResultHistory.Text = $"{math.Text} = {convertedTextResult}";
+                ResultHistory.Text = $"{math.Text}={convertedTextResult}";
                 math.Text = "";
             }
             catch (Exception ex)

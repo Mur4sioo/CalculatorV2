@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -40,13 +41,15 @@ namespace Calculator
 
         private void AddVariiable_Click(object sender, EventArgs e)
         {
-            if (VariableNameTextBox.Text.Length == 1 && double.TryParse(VariableValueTextBox.Text, out double variableValue))
+            if (VariableNameTextBox.Text.Length == 1 && double.TryParse(VariableValueTextBox.Text, out double variableValue) && !Variables.ContainsKey(VariableNameTextBox.Text))
             {
                 Variables.Add(VariableNameTextBox.Text, variableValue);
                 variablesList.Items.Add($"{VariableNameTextBox.Text} = {variableValue}");
+                VariableNameTextBox.Clear();
+                VariableValueTextBox.Clear();
             }
             else
-                MessageBox.Show($"Invalid variable format.");
+                MessageBox.Show($"Invalid variable format or variable name is already in use.");
         }
 
         private void ClearVariables_Click(object sender, EventArgs e)
