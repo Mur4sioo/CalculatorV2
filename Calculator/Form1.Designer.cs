@@ -50,11 +50,13 @@
             button1 = new Button();
             button14 = new Button();
             Settings_Button = new Button();
+            variablesButton = new Button();
+            ResultHistory = new Label();
             SuspendLayout();
             // 
             // NumClick
             // 
-            NumClick.Location = new Point(19, 199);
+            NumClick.Location = new Point(19, 249);
             NumClick.Margin = new Padding(2);
             NumClick.Name = "NumClick";
             NumClick.Size = new Size(56, 48);
@@ -66,7 +68,7 @@
             // math
             // 
             math.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            math.Location = new Point(19, 16);
+            math.Location = new Point(19, 64);
             math.Margin = new Padding(2);
             math.Multiline = true;
             math.Name = "math";
@@ -76,7 +78,7 @@
             // 
             // BackClick
             // 
-            BackClick.Location = new Point(260, 96);
+            BackClick.Location = new Point(260, 146);
             BackClick.Margin = new Padding(2);
             BackClick.Name = "BackClick";
             BackClick.Size = new Size(56, 48);
@@ -87,7 +89,7 @@
             // 
             // Equals
             // 
-            Equals.Location = new Point(139, 251);
+            Equals.Location = new Point(139, 301);
             Equals.Margin = new Padding(2);
             Equals.Name = "Equals";
             Equals.Size = new Size(56, 48);
@@ -98,7 +100,7 @@
             // 
             // ClearClick
             // 
-            ClearClick.Location = new Point(260, 148);
+            ClearClick.Location = new Point(260, 198);
             ClearClick.Margin = new Padding(2);
             ClearClick.Name = "ClearClick";
             ClearClick.Size = new Size(56, 48);
@@ -109,7 +111,7 @@
             // 
             // OperatorClick
             // 
-            OperatorClick.Location = new Point(200, 251);
+            OperatorClick.Location = new Point(200, 301);
             OperatorClick.Margin = new Padding(2);
             OperatorClick.Name = "OperatorClick";
             OperatorClick.Size = new Size(56, 48);
@@ -120,7 +122,7 @@
             // 
             // decimal_point
             // 
-            decimal_point.Location = new Point(19, 251);
+            decimal_point.Location = new Point(19, 301);
             decimal_point.Margin = new Padding(2);
             decimal_point.Name = "decimal_point";
             decimal_point.Size = new Size(56, 48);
@@ -131,7 +133,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(79, 251);
+            button2.Location = new Point(79, 301);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(56, 48);
@@ -142,7 +144,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(79, 199);
+            button3.Location = new Point(79, 249);
             button3.Margin = new Padding(2);
             button3.Name = "button3";
             button3.Size = new Size(56, 48);
@@ -153,7 +155,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(19, 148);
+            button4.Location = new Point(19, 198);
             button4.Margin = new Padding(2);
             button4.Name = "button4";
             button4.Size = new Size(56, 48);
@@ -164,7 +166,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(79, 148);
+            button5.Location = new Point(79, 198);
             button5.Margin = new Padding(2);
             button5.Name = "button5";
             button5.Size = new Size(56, 48);
@@ -175,7 +177,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(139, 148);
+            button6.Location = new Point(139, 198);
             button6.Margin = new Padding(2);
             button6.Name = "button6";
             button6.Size = new Size(56, 48);
@@ -186,7 +188,7 @@
             // 
             // button7
             // 
-            button7.Location = new Point(139, 96);
+            button7.Location = new Point(139, 146);
             button7.Margin = new Padding(2);
             button7.Name = "button7";
             button7.Size = new Size(56, 48);
@@ -197,7 +199,7 @@
             // 
             // button8
             // 
-            button8.Location = new Point(79, 96);
+            button8.Location = new Point(79, 146);
             button8.Margin = new Padding(2);
             button8.Name = "button8";
             button8.Size = new Size(56, 48);
@@ -208,7 +210,7 @@
             // 
             // button9
             // 
-            button9.Location = new Point(19, 96);
+            button9.Location = new Point(19, 146);
             button9.Margin = new Padding(2);
             button9.Name = "button9";
             button9.Size = new Size(56, 48);
@@ -219,7 +221,7 @@
             // 
             // button10
             // 
-            button10.Location = new Point(139, 199);
+            button10.Location = new Point(139, 249);
             button10.Margin = new Padding(2);
             button10.Name = "button10";
             button10.Size = new Size(56, 48);
@@ -230,7 +232,7 @@
             // 
             // button11
             // 
-            button11.Location = new Point(200, 199);
+            button11.Location = new Point(200, 249);
             button11.Margin = new Padding(2);
             button11.Name = "button11";
             button11.Size = new Size(56, 48);
@@ -241,7 +243,7 @@
             // 
             // button12
             // 
-            button12.Location = new Point(200, 148);
+            button12.Location = new Point(200, 198);
             button12.Margin = new Padding(2);
             button12.Name = "button12";
             button12.Size = new Size(56, 48);
@@ -252,7 +254,7 @@
             // 
             // button13
             // 
-            button13.Location = new Point(200, 96);
+            button13.Location = new Point(200, 146);
             button13.Margin = new Padding(2);
             button13.Name = "button13";
             button13.Size = new Size(56, 48);
@@ -263,7 +265,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(260, 199);
+            button1.Location = new Point(260, 249);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(56, 48);
@@ -274,7 +276,7 @@
             // 
             // button14
             // 
-            button14.Location = new Point(260, 251);
+            button14.Location = new Point(260, 301);
             button14.Margin = new Padding(2);
             button14.Name = "button14";
             button14.Size = new Size(56, 48);
@@ -285,13 +287,31 @@
             // 
             // Settings_Button
             // 
-            Settings_Button.Location = new Point(80, 304);
+            Settings_Button.Location = new Point(200, 354);
             Settings_Button.Name = "Settings_Button";
-            Settings_Button.Size = new Size(176, 48);
+            Settings_Button.Size = new Size(117, 48);
             Settings_Button.TabIndex = 29;
             Settings_Button.Text = "Settings";
             Settings_Button.UseVisualStyleBackColor = true;
             Settings_Button.Click += Settings_Button_Click;
+            // 
+            // variablesButton
+            // 
+            variablesButton.Location = new Point(19, 354);
+            variablesButton.Name = "variablesButton";
+            variablesButton.Size = new Size(116, 48);
+            variablesButton.TabIndex = 30;
+            variablesButton.Text = "Variables";
+            variablesButton.UseVisualStyleBackColor = true;
+            variablesButton.Click += variablesButton_Click;
+            // 
+            // ResultHistory
+            // 
+            ResultHistory.AutoSize = true;
+            ResultHistory.Location = new Point(19, 47);
+            ResultHistory.Name = "ResultHistory";
+            ResultHistory.Size = new Size(0, 15);
+            ResultHistory.TabIndex = 31;
             // 
             // Calculator
             // 
@@ -299,7 +319,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.White;
-            ClientSize = new Size(337, 366);
+            ClientSize = new Size(337, 414);
+            Controls.Add(ResultHistory);
+            Controls.Add(variablesButton);
             Controls.Add(Settings_Button);
             Controls.Add(button14);
             Controls.Add(button1);
@@ -353,5 +375,7 @@
         private Button button1;
         private Button button14;
         private Button Settings_Button;
+        private Button variablesButton;
+        private Label ResultHistory;
     }
 }

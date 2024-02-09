@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Cryptography.X509Certificates;
 using Calculator;
@@ -14,6 +15,7 @@ namespace Calculator
         bool accept_operator = false;
         bool accept_decimal = true;
         private ExpressionOptions options { get; set; } = ExpressionOptions.Default;
+        private Dictionary<string, double> variables = new Dictionary<string, double>();
         public Calculator()
         {
 
@@ -51,18 +53,19 @@ namespace Calculator
             try
             {
 
-            var doubleResult = engine.Evaluate(math.Text, options);
-            var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
-            var convertedTextResult = ExpressionOptions.ChangeDecimalPoint(
-                textResult,
-                convertFrom: '.',
-                convertTo: options.DecimalPointCharacter
-            );
-            math.Text = $"{math.Text} = {convertedTextResult}";
+                var doubleResult = engine.Evaluate(math.Text, variables, options);
+                var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
+                var convertedTextResult = ExpressionOptions.ChangeDecimalPoint(
+                    textResult,
+                    convertFrom: '.',
+                    convertTo: options.DecimalPointCharacter
+                );
+                ResultHistory.Text = $"{math.Text} = {convertedTextResult}";
+                math.Text = "";
             }
             catch (Exception ex)
             {
-               MessageBox.Show($"Invalid input.");
+                MessageBox.Show($"Invalid input.");
             }
         }
 
@@ -77,6 +80,16 @@ namespace Calculator
             if (settingsForm.ShowDialog() == DialogResult.OK)
             {
                 this.options = settingsForm.Options;
+            }
+        }
+
+        private void variablesButton_Click(object sender, EventArgs e)
+        {
+            using var variablesForm = new VariablesForm(variables);
+            if (variablesForm.ShowDialog() == DialogResult.OK)
+            {
+                this.variables = variablesForm.Variables;
+
             }
         }
     }
