@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,21 @@ namespace Calculator
     public partial class VariablesForm : Form
     {
         public Dictionary<string, double> Variables = new Dictionary<string, double>();
-        public VariablesForm(Dictionary<string, double> variables) 
+        public VariablesForm(Dictionary<string, double> variables)
         {
             this.Variables = variables;
             InitializeComponent();
             foreach (var variable in variables)
             {
-                variablesList.Items.Add($"{variable.Key} = {variable.Value}");
+                variablesList.Items.Add(CreateListViewItem(variable.Key, variable.Value));
             }
+
+        }
+
+        private ListViewItem CreateListViewItem(string name, double value)
+        {
+            var columnValues = new string[] { name, value.ToString(CultureInfo.CurrentCulture) };
+            return new ListViewItem(columnValues) { Name = name };
         }
 
         private void variablesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -43,9 +51,8 @@ namespace Calculator
         {
             if (VariableNameTextBox.Text.Length == 1 && double.TryParse(VariableValueTextBox.Text, out double variableValue) && !Variables.ContainsKey(VariableNameTextBox.Text))
             {
-                var columnValues = new string[] { VariableNameTextBox.Text, VariableValueTextBox.Text };
-                var item = new ListViewItem(columnValues) { Name = VariableNameTextBox.Text };
-                variablesList.Items.Add(item);
+                variablesList.Items.Add(CreateListViewItem(VariableNameTextBox.Text, variableValue));
+                Variables.Add(VariableNameTextBox.Text, variableValue);
                 VariableNameTextBox.Clear();
                 VariableValueTextBox.Clear();
             }
@@ -56,6 +63,16 @@ namespace Calculator
         private void ClearVariables_Click(object sender, EventArgs e)
         {
             variablesList.Clear();
+        }
+
+        private void deleteVariableButton_Click(object sender, EventArgs e)
+        {
+            while (variablesList.SelectedItems.Count > 0)
+            {
+                var item = variablesList.SelectedItems[0];
+                variablesList.Items.Remove(item);
+                Variables.Remove(item.Name);
+            }
         }
     }
 }

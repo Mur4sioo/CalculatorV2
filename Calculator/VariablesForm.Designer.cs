@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             variablesList = new ListView();
+            Variable = new ColumnHeader();
+            Value = new ColumnHeader();
             AddVariiable = new Button();
             ClearVariables = new Button();
             VariableNameTextBox = new TextBox();
@@ -37,10 +39,12 @@
             CancelButton = new Button();
             VariableNameLabel = new Label();
             VariableValueLabel = new Label();
+            deleteVariableButton = new Button();
             SuspendLayout();
             // 
             // variablesList
             // 
+            variablesList.Columns.AddRange(new ColumnHeader[] { Variable, Value });
             variablesList.Location = new Point(12, 12);
             variablesList.Name = "variablesList";
             variablesList.Size = new Size(187, 134);
@@ -49,11 +53,21 @@
             variablesList.View = View.Details;
             variablesList.SelectedIndexChanged += variablesList_SelectedIndexChanged;
             // 
+            // Variable
+            // 
+            Variable.Text = "Variables";
+            Variable.Width = 90;
+            // 
+            // Value
+            // 
+            Value.Text = "Value";
+            Value.Width = 90;
+            // 
             // AddVariiable
             // 
             AddVariiable.Location = new Point(12, 203);
             AddVariiable.Name = "AddVariiable";
-            AddVariiable.Size = new Size(89, 52);
+            AddVariiable.Size = new Size(60, 52);
             AddVariiable.TabIndex = 1;
             AddVariiable.Text = "Add";
             AddVariiable.UseVisualStyleBackColor = true;
@@ -61,9 +75,9 @@
             // 
             // ClearVariables
             // 
-            ClearVariables.Location = new Point(107, 203);
+            ClearVariables.Location = new Point(140, 203);
             ClearVariables.Name = "ClearVariables";
-            ClearVariables.Size = new Size(92, 52);
+            ClearVariables.Size = new Size(59, 52);
             ClearVariables.TabIndex = 2;
             ClearVariables.Text = "Clear";
             ClearVariables.UseVisualStyleBackColor = true;
@@ -123,12 +137,23 @@
             VariableValueLabel.TabIndex = 8;
             VariableValueLabel.Text = "Variable value:";
             // 
+            // deleteVariableButton
+            // 
+            deleteVariableButton.Location = new Point(78, 203);
+            deleteVariableButton.Name = "deleteVariableButton";
+            deleteVariableButton.Size = new Size(56, 52);
+            deleteVariableButton.TabIndex = 9;
+            deleteVariableButton.Text = "Delete";
+            deleteVariableButton.UseVisualStyleBackColor = true;
+            deleteVariableButton.Click += deleteVariableButton_Click;
+            // 
             // VariablesForm
             // 
             AcceptButton = OkButton;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(217, 318);
+            Controls.Add(deleteVariableButton);
             Controls.Add(VariableValueLabel);
             Controls.Add(VariableNameLabel);
             Controls.Add(CancelButton);
@@ -155,5 +180,8 @@
         private Button CancelButton;
         private Label VariableNameLabel;
         private Label VariableValueLabel;
+        private Button deleteVariableButton;
+        private ColumnHeader Variable;
+        private ColumnHeader Value;
     }
 }

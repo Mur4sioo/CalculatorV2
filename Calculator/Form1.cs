@@ -50,8 +50,8 @@ namespace Calculator
 
         private void Equals_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
 
                 var doubleResult = engine.Evaluate(math.Text, variables, options);
                 var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
@@ -62,11 +62,11 @@ namespace Calculator
                 );
                 ResultHistory.Text = $"{math.Text}={convertedTextResult}";
                 math.Text = "";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Invalid input.");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Invalid input.");
+            //}
         }
 
         private void decimal_point_Click(object sender, EventArgs e)
