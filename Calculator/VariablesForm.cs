@@ -43,8 +43,9 @@ namespace Calculator
         {
             if (VariableNameTextBox.Text.Length == 1 && double.TryParse(VariableValueTextBox.Text, out double variableValue) && !Variables.ContainsKey(VariableNameTextBox.Text))
             {
-                Variables.Add(VariableNameTextBox.Text, variableValue);
-                variablesList.Items.Add($"{VariableNameTextBox.Text} = {variableValue}");
+                var columnValues = new string[] { VariableNameTextBox.Text, VariableValueTextBox.Text };
+                var item = new ListViewItem(columnValues) { Name = VariableNameTextBox.Text };
+                variablesList.Items.Add(item);
                 VariableNameTextBox.Clear();
                 VariableValueTextBox.Clear();
             }

@@ -46,6 +46,7 @@
             variablesList.Size = new Size(187, 134);
             variablesList.TabIndex = 0;
             variablesList.UseCompatibleStateImageBehavior = false;
+            variablesList.View = View.Details;
             variablesList.SelectedIndexChanged += variablesList_SelectedIndexChanged;
             // 
             // AddVariiable
