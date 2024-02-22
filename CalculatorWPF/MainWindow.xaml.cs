@@ -1,4 +1,6 @@
-﻿namespace CalculatorWPF
+﻿using System.Windows;
+
+namespace CalculatorWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

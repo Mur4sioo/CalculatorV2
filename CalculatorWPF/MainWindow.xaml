@@ -5,52 +5,86 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculatorWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Calculator" Height="520" Width="350">
+        <Window.Resources>
+            <Style TargetType="Window">
+                <Setter Property="Background" Value="#3a2b34"/>
+            </Style>
+        </Window.Resources>
     <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="Display"/>
-        <TextBox DockPanel.Dock="Top" Text="Entry" />
+        <TextBlock DockPanel.Dock="Top" Text="Display" FontSize="24" TextAlignment="Right" Padding="0,10,10,10"/>
+        <TextBox DockPanel.Dock="Top" Text="Entry" FontSize="28" FontWeight="Medium" TextAlignment="Right" Padding="0,10,10,10"/>
 
         <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
             <Button DockPanel.Dock="Left" Content="Variables" />
             <Button DockPanel.Dock="Right" Content="Settings" />
         </DockPanel>
-    
-        <UniformGrid Columns="5" Background="#FFEFF1F3">
+        
+        <UniformGrid Columns="4">
             <UniformGrid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="FontSize" Value="24"/>
                     <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="Margin" Value="1" />
-                    <Setter Property="Background" Value="Gray"/>
+                    <Setter Property="Margin" Value="4" />
+                    <Setter Property="Background" Value="#4f484e"/>
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate  TargetType="Button">
+                                <Border CornerRadius="10"  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="SpecialButtonStyle" TargetType="Button">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Margin" Value="1" />
+                    <Setter Property="Background" Value="#53cdfe"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate  TargetType="Button">
+                                <Border CornerRadius="10"  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </UniformGrid.Resources>
+            
+            <Button Content="("/>
+            <Button Content=")"/>
+            <Button Content="C"/>
+            <Button Content="⌫"/>
             
             <Button Content="7" />
             <Button Content="8" />
             <Button Content="9" />
             <Button Content="+" />
-            <Button Content="back"/>
+            
             
             <Button Content="4" />
             <Button Content="5" />
             <Button Content="6" />
             <Button Content="-" />
-            <Button Content="C"/>
             
             <Button Content="1" />
             <Button Content="2" />
             <Button Content="3" />
             <Button Content="*" />
-            <Button Content="("/>
             
             <Button Content="," />
             <Button Content="0" />
-            <Button Content="=" />
+            <Button Content="=" Style="{StaticResource SpecialButtonStyle}"/>
             <Button Content="/" />
-            <Button Content=")"/>
         </UniformGrid>
     </DockPanel>
 </Window>
