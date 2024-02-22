@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evaluator", "Evaluator\Evaluator.csproj", "{5DC38B83-75D6-4A7C-958C-C68FC19D98C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWPF", "CalculatorWPF\CalculatorWPF.csproj", "{0C2BE1F0-9344-4CD8-ADD4-3DC359C8A251}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWPF", "CalculatorWPF\CalculatorWPF.csproj", "{BC1E7FEF-A843-4321-AC39-B77E32188B83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{5DC38B83-75D6-4A7C-958C-C68FC19D98C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DC38B83-75D6-4A7C-958C-C68FC19D98C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DC38B83-75D6-4A7C-958C-C68FC19D98C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C2BE1F0-9344-4CD8-ADD4-3DC359C8A251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C2BE1F0-9344-4CD8-ADD4-3DC359C8A251}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C2BE1F0-9344-4CD8-ADD4-3DC359C8A251}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C2BE1F0-9344-4CD8-ADD4-3DC359C8A251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1E7FEF-A843-4321-AC39-B77E32188B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1E7FEF-A843-4321-AC39-B77E32188B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1E7FEF-A843-4321-AC39-B77E32188B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1E7FEF-A843-4321-AC39-B77E32188B83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
