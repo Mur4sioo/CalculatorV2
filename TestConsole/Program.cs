@@ -7,8 +7,7 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            double x = 12.2;
-            Console.WriteLine(x);
+            
         }
     }
 }

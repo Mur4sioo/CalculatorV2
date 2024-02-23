@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:CalculatorWPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="pack://application:,,,/CalculatorWPF;component/Styles/Button.xaml"/>
+             </ResourceDictionary.MergedDictionaries>
+             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>

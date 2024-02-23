@@ -5,68 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculatorWPF"
         mc:Ignorable="d"
-        Background="#363a43"
+        Background="#363A43"
         Title="Calculator" Height="520" Width="350" MinHeight="520" MinWidth="350">
         <Window.Resources>
-            <Style TargetType="Button">
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="#c4cad7"/>
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="Background" Value="#384050"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate  TargetType="Button">
-                            <Border CornerRadius="10"  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <Style x:Key="SpecialButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Background" Value="#EC5800"/>
             </Style>
         </Window.Resources>
-    <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="Display" FontSize="24" TextAlignment="Right" Padding="0,10,10,10" Foreground="#c4cad7"/>
-        <TextBox DockPanel.Dock="Top" Text="Entry" FontSize="28" FontWeight="Medium" TextAlignment="Right" Padding="0,10,10,10" Background="#363a43" Foreground="#c4cad7"/>
-
-        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-            <Button DockPanel.Dock="Left" Content="Variables" />
-            <Button DockPanel.Dock="Right" Content="Settings" />
-        </DockPanel>
-        
-        <UniformGrid Columns="4">
+    <Viewbox>
+        <Grid Height="520" Width="350">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+                
+            <ToggleButton x:Name="MenuToggle"
+                          Grid.Row="0"
+                          Content="Menu"
+                          FontSize="28"
+                          FontWeight="Medium"/>
             
-            <Button Content="("/>
-            <Button Content=")"/>
-            <Button Content="C" Style="{StaticResource SpecialButtonStyle}"/>
-            <Button Content="⌫" Style="{StaticResource SpecialButtonStyle}"/>
+            <Grid Grid.Row="1">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Display" FontSize="24" TextAlignment="Right" Padding="0,10,10,10" Foreground="#c4cad7"/>
+                    <TextBox DockPanel.Dock="Top" Text="Entry" FontSize="28" FontWeight="Medium" TextAlignment="Right" Padding="0,10,10,10" Background="#363A43" Foreground="#c4cad7"/>
+                    
+                    <UniformGrid Columns="4">
+                        
+                        <Button Content="("/>
+                        <Button Content=")"/>
+                        <Button Content="C" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="⌫" Style="{StaticResource SpecialButtonStyle}"/>
+                        
+                        <Button Content="7" />
+                        <Button Content="8" />
+                        <Button Content="9" />
+                        <Button Content="+" Style="{StaticResource SpecialButtonStyle}"/>
+                        
+                        
+                        <Button Content="4" />
+                        <Button Content="5" />
+                        <Button Content="6" />
+                        <Button Content="-" Style="{StaticResource SpecialButtonStyle}"/>
+                        
+                        <Button Content="1" />
+                        <Button Content="2" />
+                        <Button Content="3" />
+                        <Button Content="*" Style="{StaticResource SpecialButtonStyle}"/>
+                        
+                        <Button Content="," />
+                        <Button Content="0" />
+                        <Button Content="=" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="/" Style="{StaticResource SpecialButtonStyle}"/>
+                    </UniformGrid>
+                </DockPanel>
             
-            <Button Content="7" />
-            <Button Content="8" />
-            <Button Content="9" />
-            <Button Content="+" Style="{StaticResource SpecialButtonStyle}"/>
-            
-            
-            <Button Content="4" />
-            <Button Content="5" />
-            <Button Content="6" />
-            <Button Content="-" Style="{StaticResource SpecialButtonStyle}"/>
-            
-            <Button Content="1" />
-            <Button Content="2" />
-            <Button Content="3" />
-            <Button Content="*" Style="{StaticResource SpecialButtonStyle}"/>
-            
-            <Button Content="," />
-            <Button Content="0" />
-            <Button Content="=" Style="{StaticResource SpecialButtonStyle}"/>
-            <Button Content="/" Style="{StaticResource SpecialButtonStyle}"/>
-        </UniformGrid>
-    </DockPanel>
+                <Border Width="150"
+                        Background="#1C857E"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding ElementName=MenuToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel>
+                        <Button DockPanel.Dock="Left" Content="Variables" Margin="10"/>
+                        <Button DockPanel.Dock="Right" Content="Settings" Margin="10"/>
+                    </StackPanel>
+                </Border>    
+            </Grid>
+        </Grid>
+    </Viewbox>
 </Window>
