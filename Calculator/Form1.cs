@@ -10,12 +10,13 @@ namespace Calculator
     public partial class Calculator : Form
     {
         Evaluator.CalculatorEngine engine = new CalculatorEngine();
+        private ExpressionOptions options { get; set; } = ExpressionOptions.Default;
+        private Dictionary<string, double> variables = new Dictionary<string, double>();
         KeyboardInput keyboardinput = new KeyboardInput();
         bool accept_digit = true;
         bool accept_operator = false;
         bool accept_decimal = true;
-        private ExpressionOptions options { get; set; } = ExpressionOptions.Default;
-        private Dictionary<string, double> variables = new Dictionary<string, double>();
+        
         public Calculator()
         {
 

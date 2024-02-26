@@ -12,6 +12,9 @@
                 <Setter Property="Background" Value="#EC5800"/>
             </Style>
         </Window.Resources>
+    <Window.DataContext>
+        <local:CalculatorViewModel/>
+    </Window.DataContext>
     <Viewbox>
         <Grid Height="520" Width="350">
             <Grid.RowDefinitions>
@@ -27,36 +30,49 @@
             
             <Grid Grid.Row="1">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="Display" FontSize="24" TextAlignment="Right" Padding="0,10,10,10" Foreground="#c4cad7"/>
-                    <TextBox DockPanel.Dock="Top" Text="Entry" FontSize="28" FontWeight="Medium" TextAlignment="Right" Padding="0,10,10,10" Background="#363A43" Foreground="#c4cad7"/>
+                    <TextBlock DockPanel.Dock="Top" 
+                               Text="{Binding History, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="24" 
+                               TextAlignment="Right" 
+                               Padding="0,10,10,10" 
+                               Foreground="#c4cad7"/>
+                    <TextBox DockPanel.Dock="Top" 
+                             Text ="{Binding Display, UpdateSourceTrigger=PropertyChanged}" 
+                             FontSize="28" 
+                             FontWeight="Medium" 
+                             TextAlignment="Right" 
+                             Padding="0,10,10,10" 
+                             Background="#363A43" 
+                             Foreground="#c4cad7"/>
                     
                     <UniformGrid Columns="4">
                         
-                        <Button Content="("/>
-                        <Button Content=")"/>
-                        <Button Content="C" Style="{StaticResource SpecialButtonStyle}"/>
-                        <Button Content="⌫" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="(" Command="{Binding NumberCommand}" CommandParameter="("/>
+                        <Button Content=")" Command="{Binding NumberCommand}" CommandParameter=")"/>
+                        <Button Content="C" Style="{StaticResource SpecialButtonStyle}" 
+                                Command="{Binding NumberCommand}" CommandParameter="C"/>
+                        <Button Content="⌫" Style="{StaticResource SpecialButtonStyle}" 
+                                Command="{Binding BackButtonCommand}"/>
                         
-                        <Button Content="7" />
-                        <Button Content="8" />
-                        <Button Content="9" />
-                        <Button Content="+" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="7" Command="{Binding NumberCommand}" CommandParameter="7"/>
+                        <Button Content="8" Command="{Binding NumberCommand}" CommandParameter="8"/>
+                        <Button Content="9" Command="{Binding NumberCommand}" CommandParameter="9"/>
+                        <Button Content="+" Style="{StaticResource SpecialButtonStyle}" Command="{Binding NumberCommand}" CommandParameter="+"/>
                         
+                        <Button Content="4" Command="{Binding NumberCommand}" CommandParameter="4"/>
+                        <Button Content="5" Command="{Binding NumberCommand}" CommandParameter="5"/>
+                        <Button Content="6" Command="{Binding NumberCommand}" CommandParameter="6"/>
+                        <Button Content="-" Style="{StaticResource SpecialButtonStyle}" Command="{Binding NumberCommand}" CommandParameter="-"/>
                         
-                        <Button Content="4" />
-                        <Button Content="5" />
-                        <Button Content="6" />
-                        <Button Content="-" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="1" Command="{Binding NumberCommand}" CommandParameter="1"/>
+                        <Button Content="2" Command="{Binding NumberCommand}" CommandParameter="2"/>
+                        <Button Content="3" Command="{Binding NumberCommand}" CommandParameter="3"/>
+                        <Button Content="*" Style="{StaticResource SpecialButtonStyle}" Command="{Binding NumberCommand}" CommandParameter="*"/>
                         
-                        <Button Content="1" />
-                        <Button Content="2" />
-                        <Button Content="3" />
-                        <Button Content="*" Style="{StaticResource SpecialButtonStyle}"/>
-                        
-                        <Button Content="," />
-                        <Button Content="0" />
-                        <Button Content="=" Style="{StaticResource SpecialButtonStyle}"/>
-                        <Button Content="/" Style="{StaticResource SpecialButtonStyle}"/>
+                        <Button Content="," Command="{Binding NumberCommand}" CommandParameter=","/>
+                        <Button Content="0" Command="{Binding NumberCommand}" CommandParameter="0"/>
+                        <Button Content="=" Style="{StaticResource SpecialButtonStyle}" Command="{Binding EqualsButtonCommand}"/>
+                        <Button Content="/" Style="{StaticResource SpecialButtonStyle}" Command="{Binding NumberCommand}" CommandParameter="/"/>
                     </UniformGrid>
                 </DockPanel>
             
