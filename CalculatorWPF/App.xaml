@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CalculatorWPF"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
-         <ResourceDictionary>
-             <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
                  <ResourceDictionary Source="pack://application:,,,/CalculatorWPF;component/Styles/Button.xaml"/>
              </ResourceDictionary.MergedDictionaries>
              <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+             <Style x:Key="SpecialButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                 <Setter Property="Background" Value="#EC5800"/>
+             </Style>
          </ResourceDictionary>
     </Application.Resources>
 </Application>
