@@ -10,6 +10,7 @@
                  <ResourceDictionary Source="pack://application:,,,/CalculatorWPF;component/Styles/Button.xaml"/>
              </ResourceDictionary.MergedDictionaries>
              <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+             <local:NegateConverter x:Key="NegateConverter"/>
              <Style x:Key="SpecialButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                  <Setter Property="Background" Value="#EC5800"/>
              </Style>

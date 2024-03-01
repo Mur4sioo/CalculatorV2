@@ -7,14 +7,24 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=local:VariablesViewModel, IsDesignTimeCreatable=False}">
-    <Grid>
-        <ListBox ItemsSource="{Binding Variables}" VerticalAlignment="Top" MinHeight="200">
-        </ListBox>
-        <UniformGrid VerticalAlignment="Bottom" Rows="2">
-            <TextBox VerticalAlignment="Bottom"/>
-            <TextBox VerticalAlignment="Bottom"/>
-            <Button VerticalAlignment="Bottom" Content="Add"/>
-            <Button VerticalAlignment="Bottom" Content="Delete"/>
-        </UniformGrid>
-    </Grid>
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="VariablesCollectionViewSource" Source="{Binding Variables}"/>
+    </UserControl.Resources>
+    <DataGrid ItemsSource="{Binding  Source={StaticResource VariablesCollectionViewSource}}" AutoGenerateColumns="False">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name">
+                <DataGridTextColumn.Binding>
+                    <Binding Path="Name">
+                        <Binding.ValidationRules>
+                            <local:UniqueNameValidationRule Collection="{StaticResource VariablesCollectionViewSource}"
+                                                            ValidationStep="CommittedValue"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </DataGridTextColumn.Binding>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Value" 
+                                Binding="{Binding Value}"/>
+            
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>

@@ -10,8 +10,8 @@
     <Grid>
             <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Info" />
             <StackPanel Margin="10">
-                <CheckBox Content="AS = . DS = ,"  IsChecked="{Binding UseDotForDecimal}"/>
-                <CheckBox Content="DS = . AS = ,"  VerticalAlignment="Center" IsChecked="{Binding UseDotForDecimal}"/>
+                <CheckBox Content="DecimalPointSeparator = ',' ArgumentSeparator = '.'"  IsChecked="{Binding UseDotForDecimal, Converter={StaticResource NegateConverter}}"/>
+                <CheckBox Content="DecimalPointSeparator = '.' ArgumentSeparator = ','"  VerticalAlignment="Center" IsChecked="{Binding UseDotForDecimal}"/>
             </StackPanel>
     </Grid>
 </UserControl>
