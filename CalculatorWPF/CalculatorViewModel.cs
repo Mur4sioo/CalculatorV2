@@ -10,9 +10,14 @@ namespace CalculatorWPF;
 
 public sealed partial class CalculatorViewModel : ObservableObject
 {
-    CalculatorEngine engine = new CalculatorEngine();
-    private ExpressionOptions options { get; set; } = ExpressionOptions.Default;
-    private readonly Dictionary<string, double> variables = new Dictionary<string, double>();
+    private ExpressionOptions options;
+    private readonly Dictionary<string, double> variables;
+
+    public CalculatorViewModel(ExpressionOptions options, Dictionary<string, double> variables)
+    {
+        this.options = options;
+        this.variables = variables;
+    }
     [ObservableProperty]
     private string display  = "";
     
@@ -44,7 +49,7 @@ public sealed partial class CalculatorViewModel : ObservableObject
     private void EqualsButton()
     {
         
-        var doubleResult = engine.Evaluate(this.Display, variables, options);
+        var doubleResult = CalculatorEngine.Evaluate(this.Display, variables, options);
         var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
         var convertedTextResult = ExpressionOptions.ChangeDecimalPoint(
             textResult,

@@ -14,7 +14,7 @@ namespace TestProject4
             var options = ExpressionOptions.Default;
             string math = "1+2"+options.DecimalPointCharacter+"3";
             string result = "3"+options.DecimalPointCharacter+"3";
-            string actual = engine.Evaluate(math).ToString();
+            string actual = CalculatorEngine.Evaluate(math).ToString();
             Assert.AreEqual(result, actual);
         }
 
@@ -23,7 +23,7 @@ namespace TestProject4
         {
             string math = "2-1";
             string result = "1";
-            string actual = engine.Evaluate(math).ToString();
+            string actual = CalculatorEngine.Evaluate(math).ToString();
             Assert.AreEqual(result, actual);
         }
 
@@ -58,7 +58,7 @@ namespace TestProject4
         [TestMethod]
         public void TestEvaluate()
         {
-            var math = engine.Evaluate("1 + (2 +3) *2 + 1");
+            var math = CalculatorEngine.Evaluate("1 + (2 +3) *2 + 1");
             double actual = 12;
             Assert.AreEqual(actual, math);
         }
@@ -66,7 +66,7 @@ namespace TestProject4
         [TestMethod]
         public void TestNegation()
         {
-            var math = engine.Evaluate("-5--7");
+            var math = CalculatorEngine.Evaluate("-5--7");
             double actual = 2;
             Assert.AreEqual(actual, math);
         }
@@ -74,7 +74,7 @@ namespace TestProject4
         [TestMethod]
         public void TestNegation2()
         {
-            var math = engine.Evaluate("-5----7");
+            var math = CalculatorEngine.Evaluate("-5----7");
             double actual = 2;
             Assert.AreEqual(actual, math);
         }
@@ -84,7 +84,7 @@ namespace TestProject4
         {
             var options = ExpressionOptions.Default;
             string math = "1.2";
-            var actual = engine.Evaluate(math, options);
+            var actual = CalculatorEngine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
@@ -93,7 +93,7 @@ namespace TestProject4
         {
             var options = ExpressionOptions.Default;
             string math = "1,2";
-            var actual = engine.Evaluate(math, options);
+            var actual = CalculatorEngine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
@@ -102,7 +102,7 @@ namespace TestProject4
         {
             var options = ExpressionOptions.Default;
             string math = "1" + options.DecimalPointCharacter + "2";
-            var actual = engine.Evaluate(math, options);
+            var actual = CalculatorEngine.Evaluate(math, options);
             Assert.AreEqual(1.2d, actual);
         }
 
@@ -127,7 +127,7 @@ namespace TestProject4
             var variables = new Dictionary<string, double>();
             variables.Add("x", 1);
             variables.Add("y", 2);      
-            Assert.AreEqual(3, engine.Evaluate("x+y", variables));
+            Assert.AreEqual(3, CalculatorEngine.Evaluate("x+y", variables));
         }
         [TestMethod]
         public void TestFunctionLexer()
@@ -146,14 +146,14 @@ namespace TestProject4
         [TestMethod]
         public void TestFunctionSqrt()
         {
-            var math = engine.Evaluate("sqrt(4)-1");
+            var math = CalculatorEngine.Evaluate("sqrt(4)-1");
             double actual = 1;
             Assert.AreEqual(actual, math);
         }
         [TestMethod]
         public void TestEquasion()
         {
-            var math = engine.Evaluate("2**2");
+            var math = CalculatorEngine.Evaluate("2**2");
             double actual = 4;
             Assert.AreEqual(actual, math);
         }
@@ -161,7 +161,7 @@ namespace TestProject4
         public void TestFunctionClamp()
         {
             var options = ExpressionOptions.Default;
-            var math = engine.Evaluate("clamp(20"+options.ArgumentSeparator+"1"+options.ArgumentSeparator+"10) + 2"+options.DecimalPointCharacter+"1");
+            var math = CalculatorEngine.Evaluate("clamp(20"+options.ArgumentSeparator+"1"+options.ArgumentSeparator+"10) + 2"+options.DecimalPointCharacter+"1");
             double actual = 12.1;
             Assert.AreEqual(actual, math);
         }

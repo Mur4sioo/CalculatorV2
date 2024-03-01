@@ -8,7 +8,7 @@
         Background="#363A43"
         Title="Calculator" Height="520" Width="350" MinHeight="520" MinWidth="350">
     <Window.DataContext>
-        <local:CalculatorViewModel/>
+        <local:AppViewModel/>
     </Window.DataContext>
     <Viewbox>
         <Grid Height="520" Width="350">
@@ -24,15 +24,22 @@
                           FontWeight="Medium"/>
             
             <Grid Grid.Row="1">
-                <local:CalculatorControl/>
-            
+                <ContentPresenter Content="{Binding SelectedPage}"/>
                 <Border Width="150"
                         Background="#1C857E"
                         HorizontalAlignment="Left"
-                        Visibility="{Binding ElementName=MenuToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Visibility="{Binding ElementName=MenuToggle, Path=IsChecked, 
+                        Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel>
-                        <Button DockPanel.Dock="Left" Content="Variables" Margin="10"/>
-                        <Button DockPanel.Dock="Right" Content="Settings" Margin="10"/>
+                        <Button Content="Calculator" DockPanel.Dock="Right" Margin="10"
+                                Command="{Binding SwitchViewCommand}"
+                                CommandParameter="{x:Static local:CalculatorView.Calculator}"/>
+                        <Button Content="Variables" DockPanel.Dock="Left" Margin="10"
+                                Command="{Binding SwitchViewCommand}" 
+                                CommandParameter="{x:Static local:CalculatorView.Variables}"/>
+                        <Button Content="Settings" DockPanel.Dock="Right" Margin="10"
+                                Command="{Binding SwitchViewCommand}" 
+                                CommandParameter="{x:Static local:CalculatorView.Settings}"/>
                     </StackPanel>
                 </Border>    
             </Grid>

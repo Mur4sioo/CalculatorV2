@@ -4,17 +4,17 @@ using System.Runtime.CompilerServices;
 
 namespace Evaluator
 {
-    public class CalculatorEngine
+    public static class CalculatorEngine
     {
 
-        public double Evaluate(string math, IReadOnlyDictionary<string, double>? variables= null, ExpressionOptions? options = null)
+        public static double Evaluate(string math, IReadOnlyDictionary<string, double>? variables= null, ExpressionOptions? options = null)
         {
             var ast = Parser.ParseExpression(math, options);
             return Math.Round(ast.Evaluate(variables),2);
             
         }
 
-        public double Evaluate(string math, ExpressionOptions options, IReadOnlyDictionary<string, double>? variables = null)
+        public static double Evaluate(string math, ExpressionOptions options, IReadOnlyDictionary<string, double>? variables = null)
         {
             return Evaluate(math, variables, options);
         }

@@ -54,7 +54,7 @@ namespace Calculator
             //try
             //{
 
-                var doubleResult = engine.Evaluate(math.Text, variables, options);
+                var doubleResult = CalculatorEngine.Evaluate(math.Text, variables, options);
                 var textResult = doubleResult.ToString(CultureInfo.InvariantCulture);
                 var convertedTextResult = ExpressionOptions.ChangeDecimalPoint(
                     textResult,
