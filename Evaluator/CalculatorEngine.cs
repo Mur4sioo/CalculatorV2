@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Evaluator
 {
-    public static class CalculatorEngine
+    public class CalculatorEngine
     {
 
         public static double Evaluate(string math, IReadOnlyDictionary<string, double>? variables= null, ExpressionOptions? options = null)

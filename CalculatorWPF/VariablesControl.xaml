@@ -16,7 +16,7 @@
                 <DataGridTextColumn.Binding>
                     <Binding Path="Name">
                         <Binding.ValidationRules>
-                            <local:UniqueNameValidationRule Collection="{StaticResource VariablesCollectionViewSource}"
+                                <local:UniqueNameValidationRule Collection="{StaticResource VariablesCollectionViewSource}"
                                                             ValidationStep="CommittedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
@@ -24,7 +24,6 @@
             </DataGridTextColumn>
             <DataGridTextColumn Header="Value" 
                                 Binding="{Binding Value}"/>
-            
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

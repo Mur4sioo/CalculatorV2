@@ -7,11 +7,9 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=local:SettingsViewModel, IsDesignTimeCreatable=False}">
-    <Grid>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Info" />
-            <StackPanel Margin="10">
+            <StackPanel Margin="10" Background="#363A43" >
                 <CheckBox Content="DecimalPointSeparator = ',' ArgumentSeparator = '.'"  IsChecked="{Binding UseDotForDecimal, Converter={StaticResource NegateConverter}}"/>
                 <CheckBox Content="DecimalPointSeparator = '.' ArgumentSeparator = ','"  VerticalAlignment="Center" IsChecked="{Binding UseDotForDecimal}"/>
+                <Button VerticalAlignment="Bottom" Content="Info" Click="{Binding InfoCommand}"/>
             </StackPanel>
-    </Grid>
 </UserControl>
